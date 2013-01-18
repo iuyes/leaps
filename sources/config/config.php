@@ -12,7 +12,7 @@ return array (
 		'timezone'=>'Etc/GMT-8',
 		'lock_ex'=>true,//文件读写互斥锁
 		'gzip' => true, // 是否Gzip压缩后输出
-		'debug'=>true,// 调试模式
+		'debug'=>false,// 调试模式
 		'firephp'=>true,
 		'auth_key'=>'asdfasdfaksdhfakjshdf',// 加密随机符
 		'url_model'=>0,//URL 模式 0 普通模式 1 URL友好模式（需服务器支持）

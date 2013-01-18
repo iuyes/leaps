@@ -4,12 +4,9 @@
  */
 return array (
 		'default' => array (
-				'driver' => 'Memcache',//缓存存储
+				'driver' => 'File',//缓存存储
+				'suffix'=>'.cache',
 				'expire'=>'0',
-				'servers' =>
-				array(//多个主机书写方式
-						array('host' => '127.0.0.1','port'=>11211)
-				),
 		),
 		'apc' => array (
 				'driver' => 'Apc',//缓存存储

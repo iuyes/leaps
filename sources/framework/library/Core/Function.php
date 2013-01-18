@@ -749,3 +749,29 @@ function show_trace() {
 	}
 	include FW_PATH . 'errors' . DIRECTORY_SEPARATOR . 'trace.php';
 }
+
+/**
+ * 将字符串转换为数组
+ *
+ * @param string $data
+ * @return array
+ */
+function string2array($data) {
+	$array = array ();
+	if ($data == '') return $array;
+	@eval ( "\$array = $data;" );
+	return $array;
+}
+
+/**
+ * 将数组转换为字符串
+ *
+ * @param array $data
+ * @param bool $isformdata
+ * @return string
+ */
+function array2string($data, $isformdata = 1) {
+	if ($data == '') return '';
+	if ($isformdata) $data = new_stripslashes ( $data );
+	return addslashes ( var_export ( $data, TRUE ) );
+}
