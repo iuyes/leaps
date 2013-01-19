@@ -641,7 +641,7 @@ class Model {
 	 * @param $key 返回数组按键名排序
 	 * @return array
 	 */
-	final public function listinfo($page = 1, $pagesize = 20, $key = 'id', $setpages = 10, $urlrule = '', $array = array()) {
+	final public function listinfo($page = 1, $pagesize = 20, $key = '', $setpages = 10, $urlrule = '', $array = array()) {
 		// 获取总数
 		$this->number = $this->count ();
 		$page = max ( intval ( $page ), 1 );
