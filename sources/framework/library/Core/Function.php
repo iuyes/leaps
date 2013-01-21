@@ -222,6 +222,27 @@ function KV($key, $value = '') {
 }
 
 /**
+ * 不写配置文件的配置信息
+ *
+ * @param string $key
+ * @param string $value
+ */
+function K($key,$value = null){
+	static $setting = array();//配置信息保存
+	$result = S('setting/'.$key);
+	if ($result && is_null($value)) {
+		return $result;
+	} else if($result && !is_null($value)){
+		Loader::model('setting_model')->where(array('key'=>$key))->update(array('value'=>serialize($value)));
+		S('setting/'.$key,$value);
+	} else if(!$result && !is_null($value)){
+		Loader::model('setting_model')->insert(array('key'=>$key,'value'=>serialize($value)));
+		S('setting/'.$key,$value);
+	}
+	return false;
+}
+
+/**
  * 设置和获取统计数据
  *
  * @param string $key 要统计的项

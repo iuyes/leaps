@@ -12,11 +12,11 @@ return array (
 				'hostname' => 'localhost',
 				'port'=>3306,
 				'driver' => 'mysql',
-				'database' => 'wind',
+				'database' => 'leaps_simple',
 				'username' => 'root', // 数据库帐户
 				'password' => '123456', // 数据库密码
 				'charset' => 'utf8', // 数据库编码
-				'prefix' => 'pw_', // 数据库前缀
+				'prefix' => 'yun_', // 数据库前缀
 				'pconnect' => true,
 				'autoconnect'=>true,//自动连接数据库
 		),

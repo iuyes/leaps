@@ -1,0 +1,1 @@
+a:3:{s:4:"data";s:81:"SELECT COUNT(*) AS leaps_count FROM `yun_admin` WHERE ( `issuper` = 1 ) LIMIT 1  ";s:7:"expires";i:0;s:5:"store";i:1358741695;}

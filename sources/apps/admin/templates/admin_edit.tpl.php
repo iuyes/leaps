@@ -1,0 +1,75 @@
+<?php defined('IN_ADMIN') or exit('No permission resources.');?>
+<?php
+$page_title = L('modification_succeed');
+include $this->admin_tpl('header');
+?>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
+<script type="text/javascript">
+<!--
+$(function(){
+	$.formValidator.initConfig({autotip:true,formid:"myform"});
+	$("#password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password_len_error')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password_len_error')?>"});
+	$("#email")
+	.formValidator({
+		onshow:"<?php echo L('input').L('email')?>",
+		onfocus:"<?php echo L('email').L('format_incorrect')?>",
+		oncorrect:"<?php echo L('email').L('format_right')?>"
+	})
+	.regexValidator({
+		regexp:"email",
+		datatype:"enum",
+		onerror:"<?php echo L('email').L('format_incorrect')?>"
+	});
+	$("#mobile")
+	.formValidator({
+		empty:true,onshow:"<?php echo L('input').L('mobile')?>",
+		onfocus:"<?php echo L('mobile').L('format_incorrect')?>",
+		oncorrect:"<?php echo L('mobile').L('format_right')?>"
+	})
+	.regexValidator({
+		regexp:"mobile",
+		datatype:"enum",
+		onerror:"<?php echo L('mobile').L('format_incorrect')?>"
+	});
+})
+//-->
+</script>
+<div class="subnav">
+<h2 class="title-1 line-x f14 fb blue lh28"><?php echo L('admin_manage')?></h2>
+<div class="content-menu ib-a blue line-x"><a href="?app=admin&controller=admin&action=init"><em><?php echo L('listadmins')?></em></a><span>|</span> <a href="?app=admin&controller=admin&action=add"><em><?php echo L('add_admin')?></em></a></div>
+</div>
+<div class="pad-lr-10">
+<form action="?app=admin&controller=admin&action=edit&userid=<?php echo $userid?>" method="post" id="myform">
+<table width="100%"  class="table_form">
+<tr>
+<th width="80" ><?php echo L('username')?>：</th>
+<td class="y-bg"><?php echo $userinfo['username']?></td>
+</tr>
+<tr>
+<th><?php echo L('password')?>：</th>
+<td class="y-bg"><input type="password" class="input-text" name="password" value="" id="password" /></td>
+</tr>
+<tr>
+<th><?php echo L('email')?>：</th>
+<td class="y-bg"><input type="text" class="input-text" name="email" value="<?php echo $userinfo['email'];?>" id="email"/></td>
+</tr>
+<tr>
+<th><?php echo L('realname')?>：</th>
+<td class="y-bg"><input type="text" class="input-text" name="realname" value="<?php echo $userinfo['realname'];?>" /></td>
+</tr>
+<tr>
+<th><?php echo L('mobile')?>：</th>
+<td class="y-bg"><input type="text" class="input-text" name="mobile" value="<?php echo $userinfo['mobile'];?>" id="mobile" /></td>
+</tr>
+<tr>
+<th><?php echo L('subminiature_tube')?>：</th>
+<td class="y-bg"><input type="checkbox" name="issuper" value="1" <?php if ($userinfo['issuper']) {echo 'checked';}?> /> <?php echo L('yes')?></td>
+</tr>
+</table>
+<div class="bk15"></div>
+    <input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>" />
+</form>
+</div>
+
+</body>
+</html>

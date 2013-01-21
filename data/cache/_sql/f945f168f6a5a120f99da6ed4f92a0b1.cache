@@ -1,0 +1,1 @@
+a:3:{s:4:"data";s:58:"SELECT * FROM `yun_admin` WHERE ( `userid` = 1 ) LIMIT 1  ";s:7:"expires";i:0;s:5:"store";i:1358741481;}
