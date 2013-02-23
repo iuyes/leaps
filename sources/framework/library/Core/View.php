@@ -52,20 +52,11 @@ class Core_View {
 			throw_exception ( 'Unable to load the file ' . $tplfile . ' , file is not exist.' );
 		}
 		if (! IS_SAE) {
-			if (C ( 'template', 'cache' ) == 'system') { // 本地缓存适用于百度云或阿里云
-				Core_Application::_init_cache ();
-				$filepath = 'cache://template/' . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
-				$this->compiledtplfile = $filepath . $template . '.php';
-				if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
-					$this->refresh ( $tplfile, $this->compiledtplfile );
-				}
-			} else { // 本地文本读写
-				$filepath = DATA_PATH . 'compile' . DIRECTORY_SEPARATOR . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
-				if (! is_dir ( $filepath )) @mkdir ( $filepath, 0777, true );
-				$this->compiledtplfile = $filepath . $template . '.php';
-				if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
-					$this->refresh ( $tplfile, $this->compiledtplfile );
-				}
+			$filepath = DATA_PATH . 'compile' . DIRECTORY_SEPARATOR . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
+			if (! is_dir ( $filepath )) @mkdir ( $filepath, 0777, true );
+			$this->compiledtplfile = $filepath . $template . '.php';
+			if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
+				$this->refresh ( $tplfile, $this->compiledtplfile );
 			}
 		} else { // 新浪云计算平台
 			$filepath = 'saemc://template/' . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;

@@ -81,11 +81,22 @@ class Core_Application {
 		/* 开始占用内存 */
 		define ( 'MEMORY_LIMIT_ON', function_exists ( 'memory_get_usage' ) );
 		if (MEMORY_LIMIT_ON) define ( 'START_MEMORY', memory_get_usage () );
+		self::_init_cache ();
 	}
 
 	/**
-	 * 初始化缓存流
-	 * 适用于百度云或阿里云
+	 * 生成缓存临时文件
+	 */
+	public static function _init_tmp() {
+		$tmp_path = DATA_PATH . 'tmp' . DIRECTORY_SEPARATOR . random ( '6' );
+		if (! is_dir ( $tmp_path ) || is_writable($tmp_path)) {
+			@mkdir ( $tmp_path );
+		}
+		define ( 'TMP_PATH', $tmp_path );
+	}
+
+	/**
+	 * 初始化缓存流 暂不使用
 	 */
 	public static function _init_cache() {
 		// 注册缓存流
@@ -106,9 +117,9 @@ class Core_Application {
 			define ( 'IS_DELETE', Core_Request::is_delete () );
 			define ( 'IS_AJAX', Core_Request::is_ajax () );
 			define ( 'IS_SAE', function_exists ( 'saeAutoLoader' ) ? true : false );
-			//define ( 'IS_BAE', true );
-			//define ( 'IS_SDAE', true );
-			//define ( 'IS_ALIAE', true );
+			// define ( 'IS_BAE', true );
+			// define ( 'IS_SDAE', true );
+			// define ( 'IS_ALIAE', true );
 			@header ( 'Content-Type: text/html; charset=' . CHARSET );
 			@header ( 'X-Powered-By: PHP/' . PHP_VERSION . ' Leaps/' . LEAPS_VERSION );
 			// 页面压缩输出支持
