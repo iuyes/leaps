@@ -233,6 +233,8 @@ class Core {
 	 * 致命错误捕捉
 	 */
 	public static function _shutdown_handle() {
+		//清理临时文件夹
+		Folder::clear(DATA_PATH.'tmp');
 		if (($errno = error_get_last ()) && $errno ['type'] & IS_DEBUG) {
 			restore_error_handler ();
 			restore_exception_handler ();
