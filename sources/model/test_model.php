@@ -6,7 +6,7 @@
  * @license http://leaps.yuncms.net
  * @version $Id$
  */
-class admin_log_model extends Model {
+class test_model extends Model {
 
 	public function __construct() {
 		$this->setting = 'default';//要加载的数据库配置

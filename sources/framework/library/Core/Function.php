@@ -247,10 +247,10 @@ function N($key, $step = 0) {
  * @param int $expires 缓存有效期
  * @param string $options 缓存配置
  */
-function S($key, $value = '', $expires = 0, $options = null) {
-	if ($value === '') { // 获取缓存
+function S($key, $value = null, $expires = 0, $options = null) {
+	if (is_null ( $value )) { // 获取缓存
 		return Loader::cache ( $options )->get ( $key );
-	} elseif (is_null ( $value )) { // 删除缓存
+	} elseif ($value === '') { // 删除缓存
 		return Loader::cache ( $options )->delete ( $key );
 	} else {
 		return Loader::cache ( $options )->set ( $key, $value, $expires );

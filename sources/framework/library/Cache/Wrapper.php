@@ -169,8 +169,8 @@ class Cache_Wrapper { // implements WrapperInterface
 
 		S ( $path_to, S ( $path_from ) );
 		S ( $path_to . '.meta', S ( $path_from . '.meta' ) );
-		S ( $path_from ,NULL);
-		S ( $path_from . '.meta' ,NULL);
+		S ( $path_from ,'');
+		S ( $path_from . '.meta' ,'');
 		clearstatcache ( true );
 		return true;
 	}
@@ -180,7 +180,7 @@ class Cache_Wrapper { // implements WrapperInterface
 
 		$path = rtrim ( $path, '/' );
 
-		S ( $path . '.meta',NULL );
+		S ( $path . '.meta','' );
 		clearstatcache ( true );
 		return true;
 	}
@@ -188,8 +188,8 @@ class Cache_Wrapper { // implements WrapperInterface
 	public function unlink($path) {
 		$path = trim ( substr ( $path, 8 ) );
 		$path = rtrim ( $path, '/' );
-		S ( $path ,null);
-		S ( $path . '.meta',null );
+		S ( $path ,'');
+		S ( $path . '.meta','' );
 		clearstatcache ( true );
 		return true;
 	}
@@ -207,7 +207,7 @@ class Cache_Wrapper { // implements WrapperInterface
 					if ($this->stat ['mode'] == $this->dir_mode || $c = S ( $path )) {
 						return $this->stat;
 					} else {
-						S ( $path . '.meta',null );
+						S ( $path . '.meta','' );
 					}
 				}
 			}
