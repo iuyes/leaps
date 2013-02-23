@@ -81,18 +81,6 @@ class Core_Application {
 		/* 开始占用内存 */
 		define ( 'MEMORY_LIMIT_ON', function_exists ( 'memory_get_usage' ) );
 		if (MEMORY_LIMIT_ON) define ( 'START_MEMORY', memory_get_usage () );
-		self::_init_cache ();
-	}
-
-	/**
-	 * 生成缓存临时文件
-	 */
-	public static function _init_tmp() {
-		$tmp_path = DATA_PATH . 'tmp' . DIRECTORY_SEPARATOR . random ( '6' );
-		if (! is_dir ( $tmp_path ) || is_writable($tmp_path)) {
-			@mkdir ( $tmp_path );
-		}
-		define ( 'TMP_PATH', $tmp_path );
 	}
 
 	/**

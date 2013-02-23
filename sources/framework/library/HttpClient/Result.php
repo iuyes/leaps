@@ -26,7 +26,7 @@ class HttpClient_Result {
 		if (isset ( $data ['header'] ) && is_array ( $data ['header'] )) foreach ( $data ['header'] as $item ) {
 			if (preg_match ( '#^([a-zA-Z0-9\-]+): (.*)$#', $item, $m )) {
 				if ($m [1] == 'Set-Cookie') {
-					if (preg_match ( '#^([a-zA-Z0-9\-_]+)=(.*)$#', $m [2], $m2 )) {
+					if (preg_match ( '#^([a-zA-Z0-9\-_]+)=(.*); Path=(.*)$#', $m [2], $m2 )) {
 						$this->cookies [$m2 [1]] = $m2 [2];
 					}
 				} else {
