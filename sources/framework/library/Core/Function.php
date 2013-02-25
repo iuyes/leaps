@@ -775,3 +775,75 @@ function array2string($data, $isformdata = 1) {
 	if ($isformdata) $data = new_stripslashes ( $data );
 	return addslashes ( var_export ( $data, TRUE ) );
 }
+
+/**
+ * 表格转数组
+ * @param string $table 表格的html代码
+ * @return array 数组
+ */
+function table2array($table) {
+	$table = preg_replace ( "'<table[^>]*?>'si", "", $table );
+	$table = preg_replace ( "'<tr[^>]*?>'si", "", $table );
+	$table = preg_replace ( "'<td[^>]*?>'si", "", $table );
+	$table = str_replace ( "</tr>", "{tr}", $table );
+	$table = str_replace ( "</td>", "{td}", $table );
+	// 去掉 HTML 标记
+	$table = preg_replace ( "'<[/!]*?[^<>]*?>'si", "", $table );
+	// 去掉空白字符
+	$table = preg_replace ( "'([rn])[s]+'", "", $table );
+	$table = str_replace ( " ", "", $table );
+	$table = str_replace ( " ", "", $table );
+	$table = explode ( '{tr}', $table );
+	array_pop ( $table );
+	$tb_array = array();
+	foreach ( $table as $key => $tr ) {
+		$td = explode ( '{td}', $tr );
+		array_pop ( $td );
+		$tb_array [] = $td;
+	}
+	return $tb_array;
+}
+
+/**
+ * 提取两个字符串之间的值，不包括分隔符
+ *
+ * @param string $string 待提取的只付出
+ * @param string $start 开始字符串
+ * @param string|null $end 结束字符串，省略将返回所有的。
+ * @return bool string substring between $start and $end or false if either
+ *         string is not found
+ *
+ */
+function substr_between($string, $start, $end = null) {
+	if (($start_pos = strpos ( $string, $start )) !== false) {
+		if ($end) {
+			if (($end_pos = strpos ( $string, $end, $start_pos + strlen ( $start ) )) !== false) {
+				return substr ( $string, $start_pos + strlen ( $start ), $end_pos - ($start_pos + strlen ( $start )) );
+			}
+		} else {
+			return substr ( $string, $start_pos );
+		}
+	}
+	return false;
+}
+
+/**
+ * 通过节点路径返回html的某个节点值
+ *
+ * @param string $html 待解析的html文档
+ * @param string $node 返回节点参数
+ * @return bool string 正常返回结果，失败返回false
+ */
+function get_data_for_html($html, $xpath) {
+	if ($html != '' && $xpath != '') {
+		$dom = new DOMDocument ();
+		if ($dom->loadHTML ( $html )) {
+			$xml = simplexml_import_dom ( $dom );
+			$result = $xml->xpath ( $xpath );
+			while ( list ( , $xpath ) = each ( $result ) ) {
+				return ( array ) $xpath;
+			}
+		}
+	}
+	return false;
+}
