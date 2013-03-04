@@ -374,6 +374,7 @@ class Model {
 	public function get_field($field, $sepa = null) {
 		$options ['field'] = $field;
 		$options = $this->_parse_options ( $options );
+		if(isset($options['key'])) unset($options['key']);
 		$field = trim ( $field );
 		if (strpos ( $field, ',' )) { // 多字段
 			if (! isset ( $options ['limit'] )) {
@@ -642,6 +643,7 @@ class Model {
 	 * @return array
 	 */
 	final public function listinfo($page = 1, $pagesize = 20, $key = '', $setpages = 10, $urlrule = '', $array = array()) {
+		//ps:复制下数组 统计完总数后options会被清空，此处复制下放下面分页用
 		$options = $this->options;
 		// 获取总数
 		$this->number = $this->count ();
