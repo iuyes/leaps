@@ -650,7 +650,7 @@ class Model {
 		$this->pages = Page::pages ( $this->number, $page, $pagesize, $urlrule, $array, $setpages );
 		$array = array ();
 		if ($this->number > 0) {
-			return $this->select ($options);
+			return $this->limit ( $offset, $pagesize )->select ($options);
 		} else {
 			return array ();
 		}
