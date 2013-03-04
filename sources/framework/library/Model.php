@@ -642,6 +642,7 @@ class Model {
 	 * @return array
 	 */
 	final public function listinfo($page = 1, $pagesize = 20, $key = '', $setpages = 10, $urlrule = '', $array = array()) {
+		$options = $this->options;
 		// 获取总数
 		$this->number = $this->count ();
 		$page = max ( intval ( $page ), 1 );
@@ -649,7 +650,7 @@ class Model {
 		$this->pages = Page::pages ( $this->number, $page, $pagesize, $urlrule, $array, $setpages );
 		$array = array ();
 		if ($this->number > 0) {
-			return $this->limit ( $offset, $pagesize )->key ( $key )->select ();
+			return $this->select ($options);
 		} else {
 			return array ();
 		}

@@ -847,3 +847,21 @@ function get_data_for_html($html, $xpath) {
 	}
 	return false;
 }
+
+function xpath_query_for_html($html, $xml_path){
+	if ($html != '' && $xml_path != '') {
+		$dom = new DOMDocument ();
+		if ($dom->loadHTML ( $html )) {
+			$xpath = new DOMXpath($dom);
+			$elements = $xpath->query($xml_path);
+			if (!is_null($elements)) {
+				foreach ($elements as $element) {
+					$nodes = $element->childNodes;
+					foreach ($nodes as $node) {
+						echo $node->nodeValue. "\n";
+					}
+				}
+			}
+		}
+	}
+}
