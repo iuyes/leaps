@@ -64,7 +64,6 @@ class Model {
 	 * @var array
 	 */
 	protected $methods = array ('table','order','alias','having','group','lock','distinct','auto','filter','validate' );
-
 	public function __construct($table = null) {
 		// 模型初始化
 		$this->_initialize ();
@@ -76,7 +75,7 @@ class Model {
 		else
 			$this->table_name = $this->prefix . $table;
 			// 字段检查
-		if ($this->auto_check_fields) $this->_check_table_info ();
+		if ($this->auto_check_fields && $this->table_name != $this->prefix) $this->_check_table_info ();
 	}
 
 	/**
@@ -166,7 +165,7 @@ class Model {
 	 * @param $replace 是否采用 replace into的方式添加数据
 	 * @return boolean 返回新建ID号
 	 */
-	final public function insert($data, $options = array(), $replace = false) {
+	final public function insert($data, $return_insert_id = false, $replace = false) {
 		if (! is_array ( $data ) || $this->table_name == '' || count ( $data ) == 0) return false;
 		// 验证完成生成数据对象
 		if ($this->auto_check_fields) { // 开启字段检测 则过滤非法字段数据
@@ -180,8 +179,9 @@ class Model {
 			}
 		}
 		// 分析表达式
-		$options = $this->_parse_options ( $options );
-		return $this->db->insert ( $data, $options, $replace );
+		$options = $this->_parse_options ();
+		$result = $this->db->insert ( $data, $options, $replace );
+		return $return_insert_id ? $this->insert_id () : true;
 	}
 
 	/**
@@ -204,8 +204,9 @@ class Model {
 		}
 		// 分析表达式
 		$options = $this->_parse_options ( $options );
-		$this->db->delete ( $options );
+		return $this->db->delete ( $options );
 	}
+
 	/**
 	 * 执行更新记录操作
 	 *
@@ -295,9 +296,20 @@ class Model {
 		}
 		return false;
 	}
-
 	final public function get_tables($table = '') {
 		return $this->db->get_tables ( $table );
+	}
+
+	/**
+	 * 检查表是否存在
+	 *
+	 * @param $table 表名
+	 * @return boolean
+	 */
+	final public function table_exists($table) {
+		$tables = $this->get_tables ();
+		$return = in_array ( $this->prefix . $table, $tables );
+		return $return ? true : false;
 	}
 
 	/**
@@ -374,7 +386,7 @@ class Model {
 	public function get_field($field, $sepa = null) {
 		$options ['field'] = $field;
 		$options = $this->_parse_options ( $options );
-		if(isset($options['key'])) unset($options['key']);
+		if (isset ( $options ['key'] )) unset ( $options ['key'] );
 		$field = trim ( $field );
 		if (strpos ( $field, ',' )) { // 多字段
 			if (! isset ( $options ['limit'] )) {
@@ -414,7 +426,6 @@ class Model {
 		}
 		return null;
 	}
-
 	public function get_table() {
 		return $this->table_name;
 	}
@@ -495,6 +506,7 @@ class Model {
 	 * @return Model
 	 */
 	public function where($where, $parse = null) {
+		if (! $where) return $this;
 		if (! is_null ( $parse ) && is_string ( $where )) {
 			if (! is_array ( $parse )) {
 				$parse = func_get_args ();
@@ -633,6 +645,15 @@ class Model {
 	}
 
 	/**
+	 * 获取查询条件字符串
+	 * @param string $where 查询条件
+	 */
+	public function get_where($where = ''){
+		if(empty($where)) $where = $this->options ['where'];
+		return $this->db->parse_where($where);
+	}
+
+	/**
 	 * 查询多条数据并分页
 	 *
 	 * @param $where 条件
@@ -643,7 +664,7 @@ class Model {
 	 * @return array
 	 */
 	final public function listinfo($page = 1, $pagesize = 20, $key = '', $setpages = 10, $urlrule = '', $array = array()) {
-		//ps:复制下数组 统计完总数后options会被清空，此处复制下放下面分页用
+		// ps:复制下数组 统计完总数后options会被清空，此处复制下放下面分页用
 		$options = $this->options;
 		// 获取总数
 		$this->number = $this->count ();
@@ -652,7 +673,7 @@ class Model {
 		$this->pages = Page::pages ( $this->number, $page, $pagesize, $urlrule, $array, $setpages );
 		$array = array ();
 		if ($this->number > 0) {
-			return $this->limit ( $offset, $pagesize )->select ($options);
+			return $this->limit ( $offset, $pagesize )->select ( $options );
 		} else {
 			return array ();
 		}

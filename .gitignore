@@ -1,3 +1,4 @@
-/.settings
-/.buildpath
-/.project
+.project
+.buildpath
+.settings
+.svn
