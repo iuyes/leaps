@@ -3,7 +3,7 @@
 define ( 'LEAPS_VERSION', '1.2.0' );
 // Leaps Release
 define ( 'LEAPS_RELEASE', '20130331' );
-define ( 'FW_PATH', dirname ( __FILE__ ) );
+define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
 class Core {
 	public static $_imports = array ();
 	public static $_classes = array ();
@@ -11,42 +11,34 @@ class Core {
 	private static $_includePaths = array ();
 
 	/**
-	 * 加载一个类或者加载一个包
-	 * 如果加载的包中有子文件夹不进行循环加载
-	 * 参数格式说明：'WIND:base.WFrontController'
-	 * WIND 注册的应用名称，应用名称与路径信息用‘:’号分隔
-	 * base.WFrontController 相对的路径信息
-	 * 如果不填写应用名称 ，例如‘base.WFrontController’，那么加载路径则相对于默认的应用路径
-	 * 加载一个类的参数方式：'WIND:base.WFrontController'
-	 * 加载一个包的参数方式：'WIND:base.*'
-	 *
-	 * @param string $filePath | 文件路径信息 或者className
-	 * @return string null
+	 * 初始化框架
 	 */
-	public static function import($filePath) {
-		if (! $filePath) return;
-		if (isset ( self::$_imports [$filePath] )) return self::$_imports [$filePath];
-		if (($pos = strrpos ( $filePath, '.' )) !== false)
-			$fileName = substr ( $filePath, $pos + 1 );
-		elseif (($pos = strrpos ( $filePath, ':' )) !== false)
-			$fileName = substr ( $filePath, $pos + 1 );
-		else
-			$fileName = $filePath;
-		$isPackage = $fileName === '*';
-		if ($isPackage) {
-			$filePath = substr ( $filePath, 0, $pos + 1 );
-			$dirPath = self::getRealPath ( trim ( $filePath, '.' ), false );
-			self::register ( $dirPath, '', true );
-		} else
-			self::_setImport ( $fileName, $filePath );
-		return $fileName;
+	public static function init() {
+		if (version_compare ( PHP_VERSION, '5.2.0', '<' )) die ( 'require PHP > 5.2.0 !' );
+		if (version_compare ( PHP_VERSION, '5.4.0', '<' )) {
+			@ini_set ( 'magic_quotes_runtime', 0 );
+			define ( 'MAGIC_QUOTES_GPC', get_magic_quotes_gpc () ? true : false );
+		} else {
+			define ( 'MAGIC_QUOTES_GPC', false );
+		}
+		if (function_exists ( "set_time_limit" ) == true and @ini_get ( "safe_mode" ) == 0) {
+			@set_time_limit ( 300 );
+		}
+		define ( 'IS_WIN', strstr ( PHP_OS, 'WIN' ) ? true : false );
+		/* 开始时间 */
+		define ( 'START_TIME', microtime ( true ) );
+		/* 开始占用内存 */
+		define ( 'MEMORY_LIMIT_ON', function_exists ( 'memory_get_usage' ) );
+		if (MEMORY_LIMIT_ON) define ( 'START_MEMORY', memory_get_usage () );
+		self::register ( FW_PATH, 'FW', true );
+		spl_autoload_register ( array ('Core','autoload' ) );
 	}
 
 	/**
 	 * 将路径信息注册到命名空间,该方法不会覆盖已经定义过的命名空间
 	 *
 	 * @param string $path 需要注册的路径
-	 * @param string $name 路径别名
+	 * @param string $alias 路径别名
 	 * @param boolean $includePath | 是否同时定义includePath
 	 * @param boolean $reset | 是否覆盖已经存在的定义，默认false
 	 * @return void
@@ -101,70 +93,20 @@ class Core {
 	}
 
 	/**
-	 * 解析路径信息，并返回路径的详情
+	 * 区分大小写的文件存在判断
 	 *
-	 * @param string $filePath 路径信息
-	 * @param boolean $suffix 是否存在文件后缀true，false，default
-	 * @return string array('isPackage','fileName','extension','realPath')
+	 * @param string $filename 文件地址
+	 * @return boolean
 	 */
-	public static function getRealPath($filePath, $suffix = '', $absolut = false) {
-		if (false !== strpos ( $filePath, DIRECTORY_SEPARATOR )) return realpath ( $filePath );
-		if (false !== ($pos = strpos ( $filePath, ':' ))) {
-			$namespace = self::getRootPath ( substr ( $filePath, 0, $pos ) );
-			$filePath = substr ( $filePath, $pos + 1 );
-		} else
-			$namespace = $absolut ? self::getRootPath ( self::getAppName () ) : '';
-
-		$filePath = str_replace ( '.', '/', $filePath );
-		$namespace && $filePath = $namespace . $filePath;
-		if ($suffix === '') return $filePath . '.' . self::$_extensions;
-		if ($suffix === true && false !== ($pos = strrpos ( $filePath, '/' ))) {
-			$filePath [$pos] = '.';
-			return $filePath;
+	private static function _file_exists($filename) {
+		if (is_file ( $filename )) {
+			if (IS_WIN) {
+				if (basename ( realpath ( $filename ) ) != basename ( $filename )) return false;
+			}
+			return true;
 		}
-		return $suffix ? $filePath . '.' . $suffix : $filePath;
-	}
-
-	/**
-	 * 解析路径信息，并返回路径的详情
-	 *
-	 * @param string $filePath 路径信息
-	 * @param boolean $absolut 是否返回绝对路径
-	 * @return string array('isPackage','fileName','extension','realPath')
-	 */
-	public static function getRealDir($dirPath, $absolut = false) {
-		if (false !== ($pos = strpos ( $dirPath, ':' ))) {
-			$namespace = self::getRootPath ( substr ( $dirPath, 0, $pos ) );
-			$dirPath = substr ( $dirPath, $pos + 1 );
-		} else
-			$namespace = $absolut ? self::getRootPath ( self::getAppName () ) : '';
-
-		return ($namespace ? $namespace : '') . str_replace ( '.', '/', $dirPath );
-	}
-
-	/**
-	 * 初始化框架
-	 */
-	public static function init() {
-		self::register ( FW_PATH, 'FW', true );
-		spl_autoload_register ( array ('Core','autoload' ) );
-	}
-
-	/**
-	 *
-	 * @param string $className
-	 * @param string $classPath
-	 * @return void
-	 */
-	private static function _setImport($className, $classPath) {
-		self::$_imports [$classPath] = $className;
-		if (! isset ( self::$_classes [$className] )) {
-			$_classPath = self::getRealPath ( $classPath, false );
-			self::$_classes [$className] = $_classPath;
-		} else
-			$_classPath = self::$_classes [$className];
-		include $_classPath . '.php';
+		return false;
 	}
 }
 Core::init ();
-print_r();
+print_r ();
