@@ -5,5 +5,4 @@
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
  * @version $Id: index.php 2 2013-01-14 07:14:05Z xutongle $
  */
-require_once 'sources/init.php';
-Core::run();
+require_once 'src/wekit.php';
