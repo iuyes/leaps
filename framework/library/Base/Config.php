@@ -1,13 +1,13 @@
 <?php
 /**
  * 配置文件操作类
- *
- * @author Tongle Xu <xutongle@gmail.com> 2012-12-24
- * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Config.php 2 2013-01-14 07:14:05Z xutongle $
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
+ * @license http://www.tintsoft.com/html/about/copyright/
+ * @version $Id$
  */
 defined ( 'CONFIG_PATH' ) or define ( 'CONFIG_PATH', SOURCE_PATH . 'config' . DIRECTORY_SEPARATOR );
-class Core_Config {
+class Base_Config {
 	private static $_file = null;
 	private static $_config = array ();
 
@@ -15,7 +15,7 @@ class Core_Config {
 	 * 设置配置文件
 	 *
 	 * @param string $file 文件名
-	 */
+	*/
 	public static function set_file($file) {
 		if (preg_match ( "/^[0-9a-z_\-]+$/i", $file )) {
 			self::$_file = CONFIG_PATH . $file . '.php';
