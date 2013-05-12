@@ -23,15 +23,17 @@ defined ( 'DATA_PATH' ) or define ( 'DATA_PATH', BASE_PATH . 'data' . DIRECTORY_
 defined ( 'SOURCE_PATH' ) or define ( 'SOURCE_PATH', BASE_PATH . 'src' . DIRECTORY_SEPARATOR );
 // The path to the "apps" folder
 defined ( 'APPS_PATH' ) or define ( 'APPS_PATH', SOURCE_PATH . 'apps' . DIRECTORY_SEPARATOR );
-if (function_exists ( 'spl_autoload_register' )) {
-	spl_autoload_register ( array ('Core','autoload' ) );
-} else {
-	function __autoload($class) {
-		return Core::autoload ( $class );
-	}
-}
 Core::init ();
 class Core {
+	private static $_frontController= null;
+
+	public static function application($type = 'Web') {
+		if (self::$_frontController === null) {
+			$_className = $type . '_Application';
+			self::$_frontController = new $_className ();
+		}
+		return self::$_frontController;
+	}
 
 	/**
 	 * 常规入口
@@ -68,7 +70,8 @@ class Core {
 	 * 系统初始化
 	 */
 	public static function init() {
-		Core_Application::get_instance ();
+		spl_autoload_register ( array ('Core','autoload' ) );
+
 	}
 
 	/**
@@ -246,4 +249,4 @@ class Core {
 		return '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';
 	}
 }
-Loader::helper ( 'Global' );
+//Loader::helper ( 'Global' );

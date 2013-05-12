@@ -20,7 +20,6 @@ class Core_View {
 	 * @var string
 	 */
 	protected $view_dir = null;
-
 	protected $_referesh = true;
 
 	/**
@@ -29,7 +28,6 @@ class Core_View {
 	 * @var string
 	 */
 	public $compiledtplfile;
-
 	public function __construct() {
 		if (C ( 'template', 'ext' )) $this->_ext = C ( 'template', 'ext' );
 		$this->_referesh = C ( 'template', 'referesh' );
@@ -51,20 +49,14 @@ class Core_View {
 		if (! file_exists ( $tplfile )) {
 			throw_exception ( 'Unable to load the file ' . $tplfile . ' , file is not exist.' );
 		}
-		if (! IS_SAE) {
-			$filepath = DATA_PATH . 'compile' . DIRECTORY_SEPARATOR . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
-			if (! is_dir ( $filepath )) @mkdir ( $filepath, 0777, true );
-			$this->compiledtplfile = $filepath . $template . '.php';
-			if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
-				$this->refresh ( $tplfile, $this->compiledtplfile );
-			}
-		} else { // 新浪云计算平台
-			$filepath = 'saemc://template/' . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
-			$this->compiledtplfile = $filepath . $template . '.php';
-			if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
-				$this->refresh ( $tplfile, $this->compiledtplfile );
-			}
+
+		$filepath = DATA_PATH . 'compile' . DIRECTORY_SEPARATOR . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
+		if (! is_dir ( $filepath )) @mkdir ( $filepath, 0777, true );
+		$this->compiledtplfile = $filepath . $template . '.php';
+		if (! file_exists ( $this->compiledtplfile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compiledtplfile )))) {
+			$this->refresh ( $tplfile, $this->compiledtplfile );
 		}
+
 		return $this->compiledtplfile;
 	}
 
@@ -165,8 +157,28 @@ class Core_View {
 		 * $find [] = "/\<\/body\>/";
 		 * $replace [] = "<?php/**
 		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
+		 * $replace [] = "<?php/**
+		 * $find [] = "/\<\/body\>/";
 		 * $replace [] = "<?php echo show_time(); ?>\r\n</body>";
 		 */
+
+
+
+
 
 
 
@@ -190,12 +202,24 @@ class Core_View {
 		 * $str = "<?php/**
 		 * $str = "<?php/**
 		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
+		 * $str = "<?php/**
 		 * $str = "<?php\n//Leaps Cache @ " .
 		 *
 		 *
 		 * date ( 'Y-m-d H:i:s' ) . "\n" . "defined('LEAPS_VERSION') or exit('No
 		 * permission resources.'); \n?>\n" . $str;
 		 */
+
+
+
+
 
 
 
