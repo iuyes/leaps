@@ -9,7 +9,7 @@
 class Web_Application extends Base_Application {
 
 	public function run() {
-		Core_Router::get_instance ( $app = null, $controller = null, $action = null );
+		Web_Router::get_instance ( $app = null, $controller = null, $action = null );
 		$app = ! is_null ( $app ) ? trim ( $app ) : APP;
 		$controller = ! is_null ( $controller ) ? trim ( $controller ) : CONTROLLER;
 		$action = ! is_null ( $action ) ? trim ( $action ) : ACTION;
