@@ -6,4 +6,4 @@
  * @version $Id: index.php 2 2013-01-14 07:14:05Z xutongle $
  */
 require_once 'src/wekit.php';
-Core::application()->run();
+Wekit::run();

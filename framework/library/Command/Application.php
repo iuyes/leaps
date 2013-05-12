@@ -1,13 +1,12 @@
 <?php
 /**
- * 应用程序创建类
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
  * @version $Id$
  */
-class Web_Application extends Base_Application {
-
+class Command_Application extends Base_Application {
 	public function run() {
 		Core_Router::get_instance ( $app = null, $controller = null, $action = null );
 		$app = ! is_null ( $app ) ? trim ( $app ) : APP;

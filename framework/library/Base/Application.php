@@ -7,16 +7,13 @@
  * @version $Id$
  */
 abstract class Base_Application {
+
 	public function __construct() {
 		$this->init ();
 	}
+
 	public function init() {
-		if (version_compare ( PHP_VERSION, '5.4.0', '<' )) {
-			@ini_set ( 'magic_quotes_runtime', 0 );
-			define ( 'MAGIC_QUOTES_GPC', get_magic_quotes_gpc () ? true : false );
-		} else {
-			define ( 'MAGIC_QUOTES_GPC', false );
-		}
+
 		if (! defined ( 'CORE_FUNCTION' ) && ! @include (FW_PATH . 'library/Core/Function.php')) exit ( 'Function.php is missing' );
 		if (function_exists ( "set_time_limit" ) == true and @ini_get ( "safe_mode" ) == 0) {
 			@set_time_limit ( 300 );
