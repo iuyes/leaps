@@ -7,4 +7,4 @@
  * @version $Id: init.php 2 2013-01-14 07:14:05Z xutongle $
  */
 defined ( 'BASE_PATH' ) or define ( 'BASE_PATH', dirname ( $_SERVER ['SCRIPT_FILENAME'] ) . DIRECTORY_SEPARATOR );
-require_once '../framework/Framework.php';
+require_once BASE_PATH.'framework/Framework.php';
