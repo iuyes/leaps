@@ -86,7 +86,7 @@ function import($name, $folder = '') {
  * @param string/bool $default 默认值
  */
 function C($file, $key = null, $default = false) {
-	return Core_Config::get ( $file, $key, $default );
+	return Base_Config::get ( $file, $key, $default );
 }
 
 /**
