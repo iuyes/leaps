@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 路由解析类
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
@@ -16,9 +16,11 @@ class Web_Router {
 	protected $_config = array ();
 	protected $params = array ();
 	protected $_sep = '_array_';
+
 	public $application = null;
 	public $controller = null;
 	public $action = null;
+
 	public function __construct() {
 		if (C ( 'router', SITE_HOST )) { // 加载基于域名的URL 路由配置
 			$this->_config = C ( 'router', SITE_HOST );

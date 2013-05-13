@@ -191,7 +191,7 @@ class Web_Request {
 	 * @access public
 	 * @return string
 	 */
-	public function get_user_browser() {
+	public static function get_user_browser() {
 		$user_agent_info = htmlspecialchars ( $_SERVER ['HTTP_USER_AGENT'] );
 		if (strpos ( $user_agent_info, 'MSIE 9.0' )) {
 			return 'IE9';
@@ -246,7 +246,7 @@ class Web_Request {
 	 * @access public
 	 * @return string
 	 */
-	public function get_user_os() {
+	public static function get_user_os() {
 		$user_agent_info = htmlspecialchars ( $_SERVER ['HTTP_USER_AGENT'] );
 		if (strpos ( $user_agent_info, 'Windows NT 6.1' )) {
 			return 'Windows 7';
