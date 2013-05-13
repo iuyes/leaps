@@ -25,7 +25,7 @@ Leaps Framework是YUNCMS团队开发的一款php框架。2009年5月份开始投
 * QQ: 85825770
 * QQ群：136057107 
 * weibo: [@-徐同乐-](http://weibo.com/xutongle)
-* twitter: [@ihubo](http://twitter.com/xutongle)
+* twitter: [@xutongle](http://twitter.com/xutongle)
 
 ##版权声明
 
@@ -36,7 +36,7 @@ Leaps Framework是YUNCMS团队开发的一款php框架。2009年5月份开始投
 ##关于作者
 
 ```javascript
-  var ihubo = {
+  var xutongle = {
     nickName  : "SuperMan",
     site : "http://www.l68.net"
   }
