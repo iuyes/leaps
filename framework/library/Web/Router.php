@@ -79,19 +79,19 @@ class Web_Router {
 	 */
 	public function get_app() {
 		if (! preg_match ( "/^[a-zA-Z0-9_]+$/", $this->application )) {
-			throw_exception ( "app 非法参数" );
+			throw new Exception ( "app 非法参数" );
 		}
 		return $this->application;
 	}
 	public function get_controller() {
 		if (! preg_match ( "/^[a-zA-Z0-9_]+$/", $this->controller )) {
-			throw_exception ( "controller 非法参数" );
+			throw new Exception ( "controller 非法参数" );
 		}
 		return ucfirst ( $this->controller );
 	}
 	public function get_action() {
 		if (! preg_match ( "/^[a-zA-Z0-9_]+$/", $this->action )) {
-			throw_exception ( "action 非法参数" );
+			throw new Exception ( "action 非法参数" );
 		}
 		return $this->action;
 	}
