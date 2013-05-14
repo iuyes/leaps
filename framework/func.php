@@ -93,6 +93,23 @@ function C($file, $key = null, $default = false) {
 }
 
 /**
+ * 记录加载和运行时间
+ *
+ * @param string $start
+ * @param string $end
+ * @param int $dec
+ */
+function G($start, $end = '', $dec = 3) {
+	static $_info = array ();
+	if (! empty ( $end )) { // 统计时间
+		if (! isset ( $_info [$end] )) $_info [$end] = microtime ( TRUE );
+		return number_format ( ($_info [$end] - $_info [$start]), $dec );
+	} else { // 记录时间
+		$_info [$start] = microtime ( TRUE );
+	}
+}
+
+/**
  * 设置和获取统计数据
  *
  * @param string $key 要统计的项
@@ -162,6 +179,41 @@ function dump($var, $echo = true, $label = null, $strict = true) {
 		return $output;
 }
 
+/**
+ * 字符串命名风格转换
+ * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
+ *
+ * @param string $name
+ *        	字符串
+ * @param integer $type
+ *        	转换类型
+ * @return string
+ */
+function parse_name($name, $type = 0) {
+	if ($type) {
+		return ucfirst ( preg_replace ( "/_([a-zA-Z])/e", "strtoupper('\\1')", $name ) );
+	} else {
+		return strtolower ( trim ( preg_replace ( "/[A-Z]/", "_\\0", $name ), "_" ) );
+	}
+}
+
+/**
+ * 根据PHP各种类型变量生成唯一标识号
+ *
+ * @param mixed $mix
+ *        	变量
+ * @return string
+ */
+function to_guid_string($mix) {
+	if (is_object ( $mix ) && function_exists ( 'spl_object_hash' )) {
+		return spl_object_hash ( $mix );
+	} elseif (is_resource ( $mix )) {
+		$mix = get_resource_type ( $mix ) . strval ( $mix );
+	} else {
+		$mix = serialize ( $mix );
+	}
+	return md5 ( $mix );
+}
 
 /**
  * 程序执行时间

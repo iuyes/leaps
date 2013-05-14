@@ -61,7 +61,6 @@ class Web_Application extends Base_Application {
 		} else {
 			throw new Base_Exception ( ACTION, 102 );
 		}
-		if(defined('TMP_FS')) Folder::clear(DATA_PATH.'TmpFS');
 	}
 
 	public function controller($controller = null, $app = null) {
