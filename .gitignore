@@ -2,3 +2,5 @@
 .buildpath
 .settings
 .svn
+.cache
+.log
