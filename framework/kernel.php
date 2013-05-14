@@ -83,7 +83,7 @@ class Core {
 		try {
 			self::import ( $file, FW_PATH . 'library' . DIRECTORY_SEPARATOR );
 		} catch ( Exception $exc ) {
-			Helper::show_error ( $exc->getMessage () );
+			Utility::show_error ( $exc->getMessage () );
 		}
 	}
 

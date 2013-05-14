@@ -8,6 +8,39 @@
  */
 class Utility{
 	/**
+	 * 404页面
+	 *
+	 * @param string	页面
+	 * @param bool	记录日志？
+	 * @return string
+	 */
+	public static function show_404($page = '', $log_error = TRUE) {
+		$heading = "404 Page Not Found";
+		$message = "The page you requested was not found.";
+		if ($log_error) {
+			log_message ( 'error', '404 Page Not Found --> ' . $page );
+		}
+		echo self::show_error ( $heading, $message, 'error_404', 404 );
+		exit ();
+	}
+
+	/**
+	 * 一般错误页面
+	 *
+	 * @param string	the heading
+	 * @param string	the message
+	 * @param string	the template name
+	 * @param int		the status code
+	 * @return string
+	 */
+	public static function show_error($message, $status_code = 500, $template = 'error_general', $heading ='An Error Was Encountered') {
+		set_status_header ( $status_code );
+		$message = '<p>' . implode ( '</p><p>', (! is_array ( $message )) ? array ($message) : $message ) . '</p>';
+		include (FW_PATH . 'errors/' . $template . '.php');
+		die();
+	}
+
+	/**
 	 * 错误信息处理方法
 	 *
 	 * @param string $file
