@@ -7,16 +7,19 @@
  */
 class IndexController extends Web_Controller {
 
+	public $db;
+
 	public function __construct() {
 		parent::__construct ();
+		$thi->db = Loader::model('admin_model');
+		print_r($this->db);
 	}
 
 	/**
 	 * 首页
 	 */
 	public function init() {
-		Factory::session();
-		$_SESSION['AAA']='VVVV';
+		$this->db->select();
 		include V ( 'index' );
 	}
 }
