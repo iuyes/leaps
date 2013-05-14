@@ -11,6 +11,34 @@ class Factory{
 	private static $instances = array ();
 
 	/**
+	 * 获取存储实例
+	 *
+	 * @param $config
+	 */
+	public static function storage($config = '') {
+		if (! empty ( $config ) && is_string ( $config )) { // 不为空并且是字符串
+			$i_name = $config;
+			$config = C ( 'storage', $config );
+		} elseif (is_array ( $config )) { // 数组配置
+			$config = array_change_key_case ( $config );
+			$i_name = '.config_' . md5 ( serialize ( $config ) );
+		} elseif (empty ( $config )) { // 如果配置为空，读取默认配置文件设置
+			$config = C ( 'storage', 'default' );
+			$i_name = 'default';
+		}
+		if (! isset ( self::$instances ['storage'] [$i_name] )) {
+			if (! is_array ( $config ) || empty ( $config ['driver'] )) throw new Exception ( 'No database configuration.' );
+			$class = 'Storage_Driver_' . ucfirst ( strtolower ( $config ['driver'] ) );
+			if (class_exists ( $class )) { // 检查驱动类
+				self::$instances ['storage'] [$i_name] = new $class ( $config );
+			} else {
+				throw new Exception ( 'No database driver' . ': ' . $class ); // 类没有定义
+			}
+		}
+		return self::$instances ['storage'] [$i_name];
+	}
+
+	/**
 	 * 加载缓存
 	 *
 	 * @param string $setting 配置项
@@ -64,7 +92,6 @@ class Factory{
 		}
 		return self::$instances ['session'];
 	}
-
 
 	public static function db($db_config = '') {
 		if (! empty ( $db_config ) && is_string ( $db_config )) { // 不为空并且是字符串
