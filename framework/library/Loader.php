@@ -17,7 +17,7 @@ class Loader {
 	 */
 	public static function model($model, $initialize = true) {
 		if (! isset ( self::$instances ['model'] [$model] )) {
-			import ( $model, SOURCE_PATH . 'model' . DIRECTORY_SEPARATOR );
+			import ( $model, WEKIT_PATH . 'model' . DIRECTORY_SEPARATOR );
 			if ($initialize)
 				self::$instances ['model'] [$model] = new $model ();
 			//if (self::$instances ['controller'] [$model] instanceof SplSubject) {
