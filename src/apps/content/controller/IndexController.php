@@ -15,6 +15,8 @@ class IndexController extends Web_Controller {
 	 * 首页
 	 */
 	public function init() {
+		Factory::session();
+		$_SESSION['AAA']='VVVV';
 		include V ( 'index' );
 	}
 }

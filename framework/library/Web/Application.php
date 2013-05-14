@@ -55,9 +55,8 @@ class Web_Application extends Base_Application {
 		define ( 'APP', $router->get_app () ); // 应用名称
 		define ( 'CONTROLLER', $router->get_controller () ); // 控制器名称
 		define ( 'ACTION', $router->get_action () ); // 事件名称
-		$controller = $this->controller ( CONTROLLER, APP );
+		$controller = $this->controller (  );
 		if (method_exists ( $controller, ACTION ) && ! preg_match ( '/^[_]/i', ACTION )) {
-
 			call_user_func ( array ($controller,ACTION ) );
 		} else {
 			throw new Base_Exception ( ACTION, 102 );
@@ -72,7 +71,6 @@ class Web_Application extends Base_Application {
 		import ( $import );
 		if (class_exists ( $classname, false )) {
 			return new $classname ();
-
 		} else {
 			throw new Base_Exception ( $classname, 100 );
 		}

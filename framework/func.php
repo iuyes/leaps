@@ -1,6 +1,7 @@
 <?php
 /**
  * 系统核心函数库
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
@@ -92,6 +93,42 @@ function C($file, $key = null, $default = false) {
 }
 
 /**
+ * 设置和获取统计数据
+ *
+ * @param string $key 要统计的项
+ * @param int $step 递加的值
+ * @return int 如果递加的值为空返回目前该项统计到的次数
+ */
+function N($key, $step = 0) {
+	static $_num = array ();
+	if (! isset ( $_num [$key] )) {
+		$_num [$key] = 0;
+	}
+	if (empty ( $step ))
+		return $_num [$key];
+	else
+		$_num [$key] = $_num [$key] + ( int ) $step;
+}
+
+/**
+ * 全局缓存读取、设置、删除，默认为文件缓存。
+ *
+ * @param string $key 缓存名称
+ * @param string $value 缓存内容
+ * @param int $expires 缓存有效期
+ * @param string $options 缓存配置
+ */
+function S($key, $value = null, $expires = 0, $options = null) {
+	if (is_null ( $value )) { // 获取缓存
+		return Factory::cache ( $options )->get ( $key );
+	} elseif ($value === '') { // 删除缓存
+		return Factory::cache ( $options )->delete ( $key );
+	} else {
+		return Factory::cache ( $options )->set ( $key, $value, $expires );
+	}
+}
+
+/**
  * 浏览器友好的变量输出
  *
  * @param mixed $var 变量
@@ -125,23 +162,6 @@ function dump($var, $echo = true, $label = null, $strict = true) {
 		return $output;
 }
 
-/**
- * 设置和获取统计数据
- *
- * @param string $key 要统计的项
- * @param int $step 递加的值
- * @return int 如果递加的值为空返回目前该项统计到的次数
- */
-function N($key, $step = 0) {
-	static $_num = array ();
-	if (! isset ( $_num [$key] )) {
-		$_num [$key] = 0;
-	}
-	if (empty ( $step ))
-		return $_num [$key];
-	else
-		$_num [$key] = $_num [$key] + ( int ) $step;
-}
 
 /**
  * 程序执行时间
@@ -172,9 +192,8 @@ function show_time() {
 	if (IS_CLI) return "\r\n" . $show_time . "\r\n";
 	return $show_time;
 }
-
 function show_trace() {
-	if (! Web_Request::is_ajax() && C ( 'config', 'show_trace' )) {
+	if (! Web_Request::is_ajax () && C ( 'config', 'show_trace' )) {
 		$trace_page_tabs = array ('BASE' => '基本','FILE' => '文件','INFO' => '流程','ERR|NOTIC' => '错误','SQL' => 'SQL','DEBUG' => '调试' ); // 页面Trace可定制的选项卡
 
 		// 系统默认显示信息
@@ -251,7 +270,6 @@ function log_message($level = 'error', $message, $php_error = FALSE) {
 	if (C ( 'log', 'log_threshold' ) == 0) return;
 	Core::log ()->write ( $level, $message, $php_error );
 }
-
 function set_status_header($code = 200, $text = '') {
 	$stati = array (200 => 'OK',201 => 'Created',202 => 'Accepted',203 => 'Non-Authoritative Information',204 => 'No Content',205 => 'Reset Content',206 => 'Partial Content',300 => 'Multiple Choices',301 => 'Moved Permanently',302 => 'Found',304 => 'Not Modified',305 => 'Use Proxy',
 			307 => 'Temporary Redirect',400 => 'Bad Request',401 => 'Unauthorized',403 => 'Forbidden',404 => 'Not Found',405 => 'Method Not Allowed',406 => 'Not Acceptable',407 => 'Proxy Authentication Required',408 => 'Request Timeout',409 => 'Conflict',410 => 'Gone',411 => 'Length Required',

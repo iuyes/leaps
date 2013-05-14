@@ -6,7 +6,7 @@
  * @version $Id: session.php 2 2013-01-14 07:14:05Z xutongle $
  */
 return array (
-		'driver' => 'cloud',
+		'driver' => 'file',
 
 		//Session 公共配置
 		'maxlifetime' => 1440,
