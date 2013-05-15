@@ -11,15 +11,14 @@ class IndexController extends Web_Controller {
 
 	public function __construct() {
 		parent::__construct ();
-		$thi->db = Loader::model('admin_model');
-		print_r($this->db);
+		$this->db = Loader::model('admin_model');
 	}
 
 	/**
 	 * 首页
 	 */
 	public function init() {
-		$this->db->select();
+
 		include V ( 'index' );
 	}
 }
