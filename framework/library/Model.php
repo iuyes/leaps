@@ -64,6 +64,11 @@ class Model {
 	 * @var array
 	 */
 	protected $methods = array ('table','order','alias','having','group','lock','distinct','auto','filter','validate' );
+
+	/**
+	 * 构造方法
+	 * @param string $dbsource
+	 */
 	public function __construct($dbsource = null) {
 		// 模型初始化
 		$this->_initialize ();

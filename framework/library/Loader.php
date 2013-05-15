@@ -19,13 +19,7 @@ class Loader {
 			import ( $model, WEKIT_PATH . 'model' . DIRECTORY_SEPARATOR );
 			if ($initialize) {
 				self::$instances ['model'] [$model] = new $model ();
-				// if (self::$instances ['controller'] [$model] instanceof
-			// SplSubject) {
-				// $plugin_dir = SOURCE_PATH . 'plugins' . DIRECTORY_SEPARATOR .
-			// 'model' . DIRECTORY_SEPARATOR. $model . DIRECTORY_SEPARATOR;
-				// self::$instances ['controller'] [$model]->attach ( new
-			// Observer ( $plugin_dir ) );
-				// }
+
 			} else {
 				return true;
 			}
