@@ -1,13 +1,14 @@
 <?php
 /**
- * 系统核心函数库
+ * 核心函数库
  *
- * @author Tongle Xu <xutongle@gmail.com>
- * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
- * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @author Tongle Xu <xutongle@gmail.com> 2013-5-15
+ * @copyright Copyright (c) 2003-2103 tintsoft.com
+ * @license http://www.tintsoft.com
+ * @version $Id: func.php 558 2013-05-17 06:37:38Z 85825770@qq.com $
  */
 define ( 'CORE_FUNCTION', true );
+
 /**
  * 返回经addslashes处理过的字符串或数组
  *
@@ -53,22 +54,15 @@ function new_htmlspecialchars($string) {
 }
 
 /**
- * 从格式话存储单位返回字节
+ * 错误日志接口
  *
- * @param string $val 格式化存储单位
+ * @param string $level 日志级别
+ * @param string $message 日志信息
+ * @param boolean $php_error 是否是PHP错误
  */
-function format_byte($val) {
-	$val = trim ( $val );
-	$last = strtolower ( $val {strlen ( $val ) - 1} );
-	switch ($last) {
-		case 'g' :
-			$val *= 1024;
-		case 'm' :
-			$val *= 1024;
-		case 'k' :
-			$val *= 1024;
-	}
-	return $val;
+function log_message($level = 'error', $message, $php_error = FALSE) {
+	if (C ( 'log', 'log_threshold' ) == 0) return;
+	Log::get_instance ()->write ( $level, $message, $php_error );
 }
 
 /**
@@ -89,7 +83,7 @@ function import($name, $folder = '') {
  * @param string/bool $default 默认值
  */
 function C($file, $key = null, $default = false) {
-	return Base_Config::get ( $file, $key, $default );
+	return Config::get ( $file, $key, $default );
 }
 
 /**
@@ -183,10 +177,8 @@ function dump($var, $echo = true, $label = null, $strict = true) {
  * 字符串命名风格转换
  * type 0 将Java风格转换为C的风格 1 将C风格转换为Java的风格
  *
- * @param string $name
- *        	字符串
- * @param integer $type
- *        	转换类型
+ * @param string $name 字符串
+ * @param integer $type 转换类型
  * @return string
  */
 function parse_name($name, $type = 0) {
@@ -200,8 +192,7 @@ function parse_name($name, $type = 0) {
 /**
  * 根据PHP各种类型变量生成唯一标识号
  *
- * @param mixed $mix
- *        	变量
+ * @param mixed $mix 变量
  * @return string
  */
 function to_guid_string($mix) {
@@ -216,178 +207,19 @@ function to_guid_string($mix) {
 }
 
 /**
- * 字符串加密、解密函数
+ * Cookie设置、获取、删除
  *
- * @param string $txt
- * @param string $operation
- * @param string $key
- * @return string
+ * @param string $var Cookie名称
+ * @param string $value Cookie值
+ * @param int $time Cookie有效期
+ * @return Ambigous <mixed, string, unknown>
  */
-function authcode($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
-	$key_length = 4;
-	$key = md5 ( $key != '' ? $key : C ( 'config', 'auth_key' ) );
-	$fixedkey = md5 ( $key );
-	$egiskeys = md5 ( substr ( $fixedkey, 16, 16 ) );
-	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr ( md5 ( microtime ( true ) ), - $key_length ) : substr ( $string, 0, $key_length )) : '';
-	$keys = md5 ( substr ( $runtokey, 0, 16 ) . substr ( $fixedkey, 0, 16 ) . substr ( $runtokey, 16 ) . substr ( $fixedkey, 16 ) );
-	$string = $operation == 'ENCODE' ? sprintf ( '%010d', $expiry ? $expiry + time () : 0 ) . substr ( md5 ( $string . $egiskeys ), 0, 16 ) . $string : base64_decode ( substr ( $string, $key_length ) );
-
-	$i = 0;
-	$result = '';
-	$string_length = strlen ( $string );
-	for($i = 0; $i < $string_length; $i ++) {
-		$result .= chr ( ord ( $string {$i} ) ^ ord ( $keys {$i % 32} ) );
-	}
-	if ($operation == 'ENCODE') {
-		return $runtokey . str_replace ( '=', '', base64_encode ( $result ) );
+function cookie($var, $value = null, $time = 0) {
+	if (is_null ( $value )) {
+		return Cookie::get ( $var );
+	} else if ($value == '') {
+		return Cookie::delete ( $var );
 	} else {
-		if ((substr ( $result, 0, 10 ) == 0 || substr ( $result, 0, 10 ) - time () > 0) && substr ( $result, 10, 16 ) == substr ( md5 ( substr ( $result, 26 ) . $egiskeys ), 0, 16 )) {
-			return substr ( $result, 26 );
-		} else {
-			return '';
-		}
+		return Cookie::set ( $var, $value, $time );
 	}
-}
-
-/**
- * 程序执行时间
- *
- * @return int
- */
-function execute_time() {
-	$etime = microtime ( true );
-	return number_format ( ($etime - START_TIME), 6 );
-}
-
-/**
- * 显示运行时间、数据库操作、缓存次数、内存使用信息
- *
- * @return string
- */
-function show_time() {
-	if (! C ( 'config', 'show_time' )) return;
-	$show_time = '';
-	// 显示运行时间
-	$show_time = 'Process: ' . execute_time () . ' seconds ';
-	if (class_exists ( 'Core_DB', false )) $show_time .= ' | DB :' . N ( 'db_query' ) . ' queries ';
-	$show_time .= ' | Cache :' . N ( 'cache_read' ) . ' gets ' . N ( 'cache_write' ) . ' writes ';
-	// 显示内存开销
-	$startMem = array_sum ( explode ( ' ', START_MEMORY ) );
-	$endMem = array_sum ( explode ( ' ', memory_get_usage () ) );
-	$show_time .= ' | UseMem:' . number_format ( ($endMem - $startMem) / 1024 ) . ' kb';
-	if (IS_CLI) return "\r\n" . $show_time . "\r\n";
-	return $show_time;
-}
-function show_trace() {
-	if (! Web_Request::is_ajax () && C ( 'config', 'show_trace' )) {
-		$trace_page_tabs = array ('BASE' => '基本','FILE' => '文件','INFO' => '流程','ERR|NOTIC' => '错误','SQL' => 'SQL','DEBUG' => '调试' ); // 页面Trace可定制的选项卡
-
-		// 系统默认显示信息
-		$files = get_included_files ();
-		$info = array ();
-		foreach ( $files as $key => $file ) {
-			$info [] = $file . ' ( ' . number_format ( filesize ( $file ) / 1024, 2 ) . ' KB )';
-		}
-		$trace = array ();
-		$base = array ('请求信息' => date ( 'Y-m-d H:i:s', $_SERVER ['REQUEST_TIME'] ) . ' ' . $_SERVER ['SERVER_PROTOCOL'] . ' ' . $_SERVER ['REQUEST_METHOD'] . ' : ' . $_SERVER ['REQUEST_URI'],'运行时间' => show_time (),
-				'内存开销' => MEMORY_LIMIT_ON ? number_format ( (memory_get_usage () - START_MEMORY) / 1024, 2 ) . ' kb' : '不支持','查询信息' => N ( 'db_query' ) . ' queries ' . N ( 'db_write' ) . ' writes ','文件加载' => count ( get_included_files () ),
-				'缓存信息' => N ( 'cache_read' ) . ' gets ' . N ( 'cache_write' ) . ' writes ','会话信息' => 'SESSION_ID=' . session_id () );
-		$debug = trace ();
-		foreach ( $trace_page_tabs as $name => $title ) {
-			switch (strtoupper ( $name )) {
-				case 'BASE' : // 基本信息
-					$trace [$title] = $base;
-					break;
-				case 'FILE' : // 文件信息
-					$trace [$title] = $info;
-					break;
-				default : // 调试信息
-					$name = strtoupper ( $name );
-					if (strpos ( $name, '|' )) { // 多组信息
-						$array = explode ( '|', $name );
-						$result = array ();
-						foreach ( $array as $name ) {
-							$result += isset ( $debug [$name] ) ? $debug [$name] : array ();
-						}
-						$trace [$title] = $result;
-					} else {
-						$trace [$title] = isset ( $debug [$name] ) ? $debug [$name] : '';
-					}
-			}
-		}
-	}
-	include FW_PATH . 'errors' . DIRECTORY_SEPARATOR . 'trace.php';
-}
-
-/**
- * 添加和获取页面Trace记录
- *
- * @param string $value 变量
- * @param string $label 标签
- * @param string $level 日志级别
- * @param boolean $record 是否记录日志
- * @return void
- */
-function trace($value = '[leaps]', $label = '', $level = 'DEBUG', $record = false) {
-	static $_trace = array ();
-	if ('[leaps]' === $value) { // 获取trace信息
-		return $_trace;
-	} else {
-		$info = ($label ? $label . ':' : '') . print_r ( $value, true );
-		if ('ERR' == $level && C ( 'config', 'trace_exception' )) { // 抛出异常
-			throw new Exception ( $info );
-		}
-		$level = strtoupper ( $level );
-		if (! isset ( $_trace [$level] )) {
-			$_trace [$level] = array ();
-		}
-		$_trace [$level] [] = $info;
-	}
-}
-
-/**
- * 错误日志接口
- *
- * @param string $level 日志级别
- * @param string $message 日志信息
- * @param boolean $php_error 是否是PHP错误
- */
-function log_message($level = 'error', $message, $php_error = FALSE) {
-	if (C ( 'log', 'log_threshold' ) == 0) return;
-	Core::log ()->write ( $level, $message, $php_error );
-}
-function set_status_header($code = 200, $text = '') {
-	$stati = array (200 => 'OK',201 => 'Created',202 => 'Accepted',203 => 'Non-Authoritative Information',204 => 'No Content',205 => 'Reset Content',206 => 'Partial Content',300 => 'Multiple Choices',301 => 'Moved Permanently',302 => 'Found',304 => 'Not Modified',305 => 'Use Proxy',
-			307 => 'Temporary Redirect',400 => 'Bad Request',401 => 'Unauthorized',403 => 'Forbidden',404 => 'Not Found',405 => 'Method Not Allowed',406 => 'Not Acceptable',407 => 'Proxy Authentication Required',408 => 'Request Timeout',409 => 'Conflict',410 => 'Gone',411 => 'Length Required',
-			412 => 'Precondition Failed',413 => 'Request Entity Too Large',414 => 'Request-URI Too Long',415 => 'Unsupported Media Type',416 => 'Requested Range Not Satisfiable',417 => 'Expectation Failed',500 => 'Internal Server Error',501 => 'Not Implemented',502 => 'Bad Gateway',
-			503 => 'Service Unavailable',504 => 'Gateway Timeout',505 => 'HTTP Version Not Supported' );
-	if ($code == '' or ! is_numeric ( $code )) {
-		Utility::show_error ( 'Status codes must be numeric', 500 );
-	}
-	if (isset ( $stati [$code] ) and $text == '') {
-		$text = $stati [$code];
-	}
-	if ($text == '') {
-		Utility::show_error ( 'No status text available.  Please check your status code number or supply your own message text.', 500 );
-	}
-	$server_protocol = (isset ( $_SERVER ['SERVER_PROTOCOL'] )) ? $_SERVER ['SERVER_PROTOCOL'] : FALSE;
-	if (IS_CGI) {
-		header ( "Status: {$code} {$text}", TRUE );
-	} elseif ($server_protocol == 'HTTP/1.1' or $server_protocol == 'HTTP/1.0') {
-		header ( $server_protocol . " {$code} {$text}", TRUE, $code );
-	} else {
-		header ( "HTTP/1.1 {$code} {$text}", TRUE, $code );
-	}
-}
-/**
- * 加载视图
- *
- * @param string $template
- * @param string $application
- * @param string $application
- */
-function V($template = 'index', $application = null, $style = null) {
-	if ($style == null) $style = C ( 'template', 'name' );
-	$compiledtplfile = View::instance ()->compile ( $template, $application, $style );
-	return $compiledtplfile;
 }

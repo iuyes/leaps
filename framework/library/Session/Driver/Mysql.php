@@ -3,7 +3,7 @@
  * Session Mysql驱动
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-14
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Mysql.php 2 2013-01-14 07:14:05Z xutongle $
+ * @version $Id: Mysql.php 552 2013-05-17 03:44:01Z 85825770@qq.com $
  */
 class Session_Driver_Mysql extends Session_Abstract {
 	public $lifetime = 1800;

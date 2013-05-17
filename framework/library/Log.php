@@ -4,7 +4,7 @@
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @version $Id: Log.php 539 2013-05-16 09:35:50Z 85825770@qq.com $
  */
 class Log {
 	protected static $instance = null;

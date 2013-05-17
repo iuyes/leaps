@@ -1,12 +1,13 @@
 <?php
 /**
- * 框架核心
+ * 核心入口
  *
- * @author Tongle Xu <xutongle@gmail.com>
- * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
- * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @author Tongle Xu <xutongle@gmail.com> 2013-5-15
+ * @copyright Copyright (c) 2003-2103 tintsoft.com
+ * @license http://www.tintsoft.com
+ * @version $Id: kernel.php 555 2013-05-17 06:17:01Z 85825770@qq.com $
  */
+error_reporting(E_ALL);
 define ( 'LEAPS_VERSION', '1.2.0' );
 define ( 'LEAPS_RELEASE', '20121210' );
 define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
@@ -14,10 +15,16 @@ define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
 class Core {
 	public static $_imports = array ();
 	private static $_frontController = null;
-	public static function application($type = 'Web') {
+
+	/**
+	 * 创建应用程序
+	 *
+	 * @param string $type
+	 */
+	public static function application($type = 'Web',$config = array()) {
 		if (self::$_frontController === null) {
 			$_className = $type . '_Application';
-			self::$_frontController = new $_className ();
+			self::$_frontController = new $_className ($config);
 		}
 		return self::$_frontController;
 	}
@@ -60,46 +67,11 @@ class Core {
 		}
 		if (self::_file_exists ( $path ) && is_file ( $path )) {
 			self::$_imports [$filePath] = $fileName;
-			include $path;
+			self::autoload ( $fileName, $path );
 		} else {
 			throw new Exception ( 'Unable to load the file ' . $path . ' , file is not exist.' );
 		}
 		return $fileName;
-	}
-
-	/**
-	 * 取得对象实例 支持调用类的静态方法
-	 *
-	 * @param string $name 类名
-	 * @param string $method 方法名，如果为空则返回实例化对象 如果定义$method为false则不实例化该类
-	 * @param array $args 调用参数
-	 * @return object
-	 */
-	public static function get_instance($classname, $method = '', $args = array()) {
-		$key = empty ( $args ) ? $classname . $method : $classname . $method . to_guid_string ( $args );
-		if (! isset ( self::$instances [$key] )) {
-			if (strpos ( $classname, ':' ) !== false) { // 是否是应用内的类
-				list ( $app, $classname ) = explode ( ':', $classname );
-				import ( $app . ':' . 'library.' . $classname );
-			} else {
-				import ( 'library.' . $classname );
-			}
-			if ($method !== false) {
-				$o = new $classname ();
-				if (! empty ( $method ) && method_exists ( $o, $method )) {
-					if (! empty ( $args )) {
-						self::$instances [$key] = call_user_func_array ( array (&$o,$method ), $args );
-					} else {
-						self::$instances [$key] = $o->$method ();
-					}
-				} else {
-					self::$instances [$key] = $o;
-				}
-			} else {
-				return true;
-			}
-		}
-		return self::$instances [$key];
 	}
 
 	/**
@@ -109,44 +81,14 @@ class Core {
 	 *
 	 * @param string $class
 	 */
-	public static function autoload($class) {
-		if (strpos ( $class, '_' ) !== false) {
-			$file = str_replace ( '_', '.', $class );
+	public static function autoload($class, $path = '') {
+		if ($path){
+			include $path;
+		}elseif (strpos ( $class, '_' ) !== false) {
+			self::import ( str_replace ( '_', '.', $class ), FW_PATH . 'library' . DIRECTORY_SEPARATOR );
 		} else {
-			$file = $class;
+			self::import ($class, FW_PATH . 'library' . DIRECTORY_SEPARATOR );
 		}
-		try {
-			self::import ( $file, FW_PATH . 'library' . DIRECTORY_SEPARATOR );
-		} catch ( Exception $exc ) {
-			Utility::show_error ( $exc->getMessage () );
-		}
-	}
-
-	/**
-	 * 区分大小写的文件存在判断
-	 *
-	 * @param string $filename 文件地址
-	 * @return boolean
-	 */
-	public static function _file_exists($filename) {
-		if (is_file ( $filename )) {
-			if (IS_WIN) {
-				if (basename ( realpath ( $filename ) ) != basename ( $filename )) return false;
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 获取Log对象
-	 *
-	 * @return log
-	 */
-	public static function log() {
-		static $log = null;
-		if (null === $log) $log = Log::get_instance ();
-		return $log;
 	}
 
 	/**
@@ -165,6 +107,22 @@ class Core {
 			}
 		}
 		return $debug;
+	}
+
+	/**
+	 * 区分大小写的文件存在判断
+	 *
+	 * @param string $filename 文件地址
+	 * @return boolean
+	 */
+	public static function _file_exists($filename) {
+		if (is_file ( $filename )) {
+			if (IS_WIN) {
+				if (basename ( realpath ( $filename ) ) != basename ( $filename )) return false;
+			}
+			return true;
+		}
+		return false;
 	}
 }
 Core::init ();

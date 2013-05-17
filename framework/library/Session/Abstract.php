@@ -3,7 +3,7 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-14
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Abstract.php 2 2013-01-14 07:14:05Z xutongle $
+ * @version $Id: Abstract.php 552 2013-05-17 03:44:01Z 85825770@qq.com $
  */
 abstract class Session_Abstract {
 	public function __construct($options = array()) {

@@ -4,7 +4,7 @@
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @version $Id: Router.php 558 2013-05-17 06:37:38Z 85825770@qq.com $
  */
 class Web_Router {
 

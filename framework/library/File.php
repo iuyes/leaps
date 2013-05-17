@@ -4,7 +4,7 @@
  * @author Tongle Xu <xutongle@gmail.com> 2013-5-14
  * @copyright Copyright (c) 2003-2103 tintsoft.com
  * @license http://www.tintsoft.com
- * @version $Id$
+ * @version $Id: File.php 546 2013-05-17 03:39:11Z 85825770@qq.com $
  */
 class File {
 
@@ -129,7 +129,7 @@ class File {
 	 */
 	public static function down($filepath, $filename = '') {
 		if (! $filename) $filename = basename ( $filepath );
-		if (Web_Request::is_ie ()) $filename = rawurlencode ( $filename );
+		if (strpos ( $_SERVER['HTTP_USER_AGENT'], 'MSIE' )) $filename = rawurlencode ( $filename );
 		$filetype = self::get_suffix ( $filename );
 		$filesize = sprintf ( "%u", filesize ( $filepath ) );
 		if (ob_get_length () !== false) @ob_end_clean ();

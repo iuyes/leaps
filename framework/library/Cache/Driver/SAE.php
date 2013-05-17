@@ -3,7 +3,7 @@
  * 新浪云计算缓存操作
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-27
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: SAE.php 2 2013-01-14 07:14:05Z xutongle $
+ * @version $Id: SAE.php 549 2013-05-17 03:41:34Z 85825770@qq.com $
  */
 class Cache_Driver_SAE extends Cache {
 

@@ -4,7 +4,7 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-15
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Mysql.php 2 2013-01-14 07:14:05Z xutongle $
+ * @version $Id: Mysql.php 550 2013-05-17 03:41:54Z 85825770@qq.com $
  */
 class Database_Driver_Mysql extends Base_DB {
 

@@ -4,7 +4,7 @@
  * @author Tongle Xu <xutongle@gmail.com> 2013-5-14
  * @copyright Copyright (c) 2003-2103 tintsoft.com
  * @license http://www.tintsoft.com
- * @version $Id$
+ * @version $Id: NoDebug.php 540 2013-05-16 09:36:13Z 85825770@qq.com $
  */
 class Base_NoDebug {
 

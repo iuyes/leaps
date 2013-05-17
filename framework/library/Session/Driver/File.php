@@ -3,7 +3,7 @@
  * Session File驱动
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-14
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: File.php 2 2013-01-14 07:14:05Z xutongle $
+ * @version $Id: File.php 552 2013-05-17 03:44:01Z 85825770@qq.com $
  */
 class Session_Driver_File extends Session_Abstract {
 

@@ -1,10 +1,10 @@
 <?php
 /**
- * 过滤器
+ * XSS过滤器
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @version $Id: Filter.php 558 2013-05-17 06:37:38Z 85825770@qq.com $
  */
 class Web_Filter {
 
@@ -19,7 +19,7 @@ class Web_Filter {
 	}
 
 	public static function input($cleanxss = 1) {
-		if (get_magic_quotes_gpc ()) {
+		if (MAGIC_QUOTES_GPC) {
 			$_POST = new_stripslashes ( $_POST );
 			$_GET = new_stripslashes ( $_GET );
 			$_COOKIE = new_stripslashes ( $_COOKIE );

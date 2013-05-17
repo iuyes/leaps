@@ -4,7 +4,7 @@
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
- * @version $Id$
+ * @version $Id: Exception.php 548 2013-05-17 03:40:00Z 85825770@qq.com $
  */
 class Base_Exception  extends Exception{
 

@@ -1,28 +1,26 @@
 <?php
 /**
- *
- * @author Tongle Xu <xutongle@gmail.com> 2013-5-14
+ * Loader类
+ * @author Tongle Xu <xutongle@gmail.com> 2013-5-17
  * @copyright Copyright (c) 2003-2103 tintsoft.com
  * @license http://www.tintsoft.com
- * @version $Id$
+ * @version $Id: Loader.php 558 2013-05-17 06:37:38Z 85825770@qq.com $
  */
-class Loader {
+class Loader{
 	private static $instances = array ();
 
 	/**
-	 * 加载模型(单例）
+	 * 加载模型
 	 *
 	 * @param $model
 	 */
 	public static function model($model, $initialize = true) {
 		if (! isset ( self::$instances ['model'] [$model] )) {
 			import ( $model, WEKIT_PATH . 'model' . DIRECTORY_SEPARATOR );
-			if ($initialize) {
+			if ($initialize)
 				self::$instances ['model'] [$model] = new $model ();
-
-			} else {
+			else
 				return true;
-			}
 		}
 		return self::$instances ['model'] [$model];
 	}
@@ -53,7 +51,7 @@ class Loader {
 	 * @param bool $initialize 是否自动实例化
 	 */
 	public static function lib($classname, $initialize = true) {
-		if (! $initialize) return Factory::get_instance ( $classname, false );
+		if (! $initialize) return self::get_instance ( $classname, false );
 		return Factory::get_instance ( $classname );
 	}
 }

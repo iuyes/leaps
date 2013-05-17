@@ -1,13 +1,13 @@
 <?php
 /**
  * 工厂类
+ *
  * @author Tongle Xu <xutongle@gmail.com> 2013-5-14
  * @copyright Copyright (c) 2003-2103 tintsoft.com
  * @license http://www.tintsoft.com
- * @version $Id$
+ * @version $Id: Factory.php 558 2013-05-17 06:37:38Z 85825770@qq.com $
  */
-class Factory{
-
+class Factory {
 	private static $instances = array ();
 
 	/**
@@ -115,5 +115,40 @@ class Factory{
 			}
 		}
 		return self::$instances ['db'] [$i_name];
+	}
+
+	/**
+	 * 取得对象实例 支持调用类的静态方法
+	 *
+	 * @param string $name 类名
+	 * @param string $method 方法名，如果为空则返回实例化对象 如果定义$method为false则不实例化该类
+	 * @param array $args 调用参数
+	 * @return object
+	 */
+	public static function get_instance($classname, $method = '', $args = array()) {
+		$key = empty ( $args ) ? $classname . $method : $classname . $method . to_guid_string ( $args );
+		if (! isset ( self::$instances [$key] )) {
+			if (strpos ( $classname, ':' ) !== false) { // 是否是应用内的类
+				list ( $app, $classname ) = explode ( ':', $classname );
+				import ( $app . ':' . 'library.' . $classname );
+			} else {
+				import ( 'library.' . $classname );
+			}
+			if ($method !== false) {
+				$o = new $classname ();
+				if (! empty ( $method ) && method_exists ( $o, $method )) {
+					if (! empty ( $args )) {
+						self::$instances [$key] = call_user_func_array ( array (&$o,$method ), $args );
+					} else {
+						self::$instances [$key] = $o->$method ();
+					}
+				} else {
+					self::$instances [$key] = $o;
+				}
+			} else {
+				return true;
+			}
+		}
+		return self::$instances [$key];
 	}
 }
