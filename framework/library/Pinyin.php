@@ -7,12 +7,21 @@
  */
 class Pinyin{
 
+	protected static $instance = null;
+
 	/**
 	 * 汉字ASCII码库
 	 *
 	 * @var array
 	 */
 	protected $lib;
+
+	public static function &instance() {
+		if (null === self::$instance) {
+			self::$instance = new self ();
+		}
+		return self::$instance;
+	}
 
 	/**
 	 * 构造函数
