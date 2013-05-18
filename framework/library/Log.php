@@ -113,7 +113,7 @@ class Log {
 	 */
 	public function show($filepath = null) {
 		$filepath = is_null ( $filepath ) ? $this->_log_path . 'log-' . date ( 'Y-m-d' ) . '.log' : $this->_log_path . $filepath . '.log';
-		$log_content = file_get_contents ( $filepath );
+		$log_content = File::read ( $filepath );
 		$list_str_array = explode ( "\r\n", $log_content );
 		unset ( $log_content );
 		$total_lines = sizeof ( $list_str_array );
@@ -140,15 +140,32 @@ class Log {
 		if (! isset ( $this->_levels [$level] ) or ($this->_levels [$level] > $this->_threshold)) {
 			return FALSE;
 		}
-
 		$filepath = $this->_log_path . 'log-' . date ( 'Y-m-d' ) . '.log';
 		// 分析日志文件大小是否超过允许的最大值
-		if (is_file ( $filepath ) && filesize ( $filepath ) >= format_byte ( $this->log_chunk_size )) {
+		if (is_file ( $filepath ) && filesize ( $filepath ) >= $this->_format_byte ( $this->log_chunk_size )) {
 			rename ( $filepath, $this->_log_path . $_SERVER ['REQUEST_TIME'] . '-' . basename ( $filepath ) );
 		}
 		$message = $level . ' ' . (($level == 'INFO') ? ' -' : '-') . ' ' . date ( $this->_date_fmt ) . ' --> ' . $msg . "\n";
 		error_log ( "{$message}\r\n", 3, $filepath );
-
 		return TRUE;
+	}
+
+	/**
+	 * 从格式话存储单位返回字节
+	 *
+	 * @param string $val 格式化存储单位
+	 */
+	private function _format_byte($val) {
+		$val = trim ( $val );
+		$last = strtolower ( $val {strlen ( $val ) - 1} );
+		switch ($last) {
+			case 'g' :
+				$val *= 1024;
+			case 'm' :
+				$val *= 1024;
+			case 'k' :
+				$val *= 1024;
+		}
+		return $val;
 	}
 }
