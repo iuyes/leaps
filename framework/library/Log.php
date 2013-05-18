@@ -68,6 +68,7 @@ class Log {
 		}
 		$this->log_chunk_size = ($_config ['log_chunk_size'] != '') ? $_config ['log_chunk_size'] : '2m';
 	}
+
 	public static function &get_instance() {
 		if (null === self::$instance) {
 			self::$instance = new self ();
