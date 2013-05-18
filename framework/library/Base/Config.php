@@ -7,7 +7,7 @@
  * @version $Id: Config.php 537 2013-05-15 11:46:09Z 85825770@qq.com $
  */
 defined ( 'CONFIG_PATH' ) or define ( 'CONFIG_PATH', WEKIT_PATH . 'config' . DIRECTORY_SEPARATOR );
-class Config {
+class Base_Config {
 	private static $_file = null;
 	private static $_config = array ();
 
