@@ -41,6 +41,35 @@ class Utility{
 	}
 
 	/**
+	 * 错误输出
+	 * @param mixed $error 错误
+	 * @return void
+	 */
+	public static function halt($message, $file, $line, $trace, $status = 0){
+		if (IS_DEBUG) {//调试模式下输出错误信息
+			list($file_lines, $trace) = self::crash($file, $line, $trace);
+			// 包含异常页面模板
+			ob_start ();
+			include (FW_PATH . 'errors/error_php.php');
+			$buffer = ob_get_contents ();
+			ob_end_clean ();
+			die($buffer) ;
+		} else {//否则定向到错误页面
+			$error_page = C ( 'config', 'error_page' );
+			if (! empty ( $error_page )) {//如果错误页面不为空就重定向到配置文件中设置的地址
+				redirect($error_page);
+			} else {
+				if (C('config','show_error_msg')){
+					$e['message'] = $message;
+				} else {
+					$e['message'] = C('config','error_message');
+				}
+			}
+			self::show_error($e['message']);
+		}
+	}
+
+	/**
 	 * 错误信息处理方法
 	 *
 	 * @param string $file
