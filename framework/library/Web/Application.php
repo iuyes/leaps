@@ -71,14 +71,19 @@ class Web_Application extends Base_Application {
 		$app = ! is_null ( $app ) ? trim ( $app ) : APP;
 		$controller = ! is_null ( $controller ) ? trim ( $controller ) : CONTROLLER;
 		$classname = $controller . 'Controller';
+		//$path = APPS_PATH . $app . DIRECTORY_SEPARATOR . 'controller'.DIRECTORY_SEPARATOR . $classname.'php';
 		import ( $app . ':controller.' . $classname );
 		if (class_exists ( $classname, false )) {
 			return new $classname ();
 		} else {
-			throw new Exception ( 'Unable to create instance for ' . $classname . ' , class is not exist.' );
+			throw new Base_Exception ( 'Unable to create instance for ' . $classname . ' , class is not exist.',100 );
 		}
 	}
 
+	/**
+	 * !CodeTemplates.overridecomment.nonjd!
+	 * @see Base_Application::showErrorMessage()
+	 */
 	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
 		if (IS_DEBUG) {
 			$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
@@ -94,7 +99,18 @@ class Web_Application extends Base_Application {
 			$buffer = ob_get_contents ();
 			ob_end_clean ();
 			die ( $buffer );
+		} else {//否则定向到错误页面
+			$error_page = C ( 'config', 'error_page' );
+			if (! empty ( $error_page )) {//如果错误页面不为空就重定向到配置文件中设置的地址
+				redirect($error_page);
+			} else {
+				if (C('config','show_error_msg')){
+					$e['message'] = $message;
+				} else {
+					$e['message'] = C('config','error_message');
+				}
+			}
+			Utility::show_error($e['message']);
 		}
-
 	}
 }
