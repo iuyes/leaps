@@ -143,6 +143,24 @@ function V($template = 'index', $application = null, $style = null) {
 }
 
 /**
+ * 全局缓存读取、设置、删除，默认为文件缓存。
+ *
+ * @param string $key 缓存名称
+ * @param string $value 缓存内容
+ * @param int $expires 缓存有效期
+ * @param string $options 缓存配置
+ */
+function S($key, $value = null, $expires = 0, $options = null) {
+	if (is_null ( $value )) { // 获取缓存
+		return Factory::cache ( $options )->get ( $key );
+	} elseif ($value === '') { // 删除缓存
+		return Factory::cache ( $options )->delete ( $key );
+	} else {
+		return Factory::cache ( $options )->set ( $key, $value, $expires );
+	}
+}
+
+/**
  * 根据PHP各种类型变量生成唯一标识号
  *
  * @param mixed $mix 变量
@@ -285,7 +303,6 @@ function trace($value = '[leaps]', $label = '', $level = 'DEBUG', $record = fals
 		$_trace [$level] [] = $info;
 	}
 }
-
 function set_status_header($code = 200, $text = '') {
 	$stati = array (200 => 'OK',201 => 'Created',202 => 'Accepted',203 => 'Non-Authoritative Information',204 => 'No Content',205 => 'Reset Content',206 => 'Partial Content',300 => 'Multiple Choices',301 => 'Moved Permanently',302 => 'Found',304 => 'Not Modified',305 => 'Use Proxy',
 					307 => 'Temporary Redirect',400 => 'Bad Request',401 => 'Unauthorized',403 => 'Forbidden',404 => 'Not Found',405 => 'Method Not Allowed',406 => 'Not Acceptable',407 => 'Proxy Authentication Required',408 => 'Request Timeout',409 => 'Conflict',410 => 'Gone',
@@ -313,6 +330,95 @@ function set_status_header($code = 200, $text = '') {
 }
 
 /**
+ * 语言文件处理
+ *
+ * @param string $language
+ * @param array $pars
+ * @param string $applications
+ * @return string
+ */
+function L($language = 'NO_LANG', $pars = array(), $applications = '') {
+	static $lang = null;
+	if (is_null ( $lang )) $lang = Base_Lang::instance ();
+	return $lang->load ( $language, $pars, $applications );
+}
+
+/**
+ * 队列操作
+ *
+ * @param string $name
+ * @param array $data
+ * @param string $setting
+ */
+function Q($name, $data = '', $setting = 'default') {
+	$queue = Factory::queue ( $setting );
+	if (empty ( $data )) {
+		return $queue->get ( $name );
+	}
+	return $queue->put ( $name, $data );
+}
+
+/**
+ * URL组装 支持不同URL模式
+ *
+ * @param string $url URL表达式，格式：'[应用/模块/操作]?参数1=值1&参数2=值2...'
+ * @param string|array $vars 传入的参数，支持数组和字符串
+ * @param boolean $redirect 是否跳转，如果设置为true则表示跳转到该URL地址
+ * @param boolean $domain 是否显示域名
+ * @return string
+ */
+function U($url = '', $vars = '', $redirect = false, $domain = false) {
+	// 解析URL
+	$info = parse_url ( $url );
+	$url = ! empty ( $info ['path'] ) ? $info ['path'] : ACTION;
+	if (isset ( $info ['fragment'] )) { // 解析锚点
+		$anchor = $info ['fragment'];
+		if (false !== strpos ( $anchor, '?' )) { // 解析参数
+			list ( $anchor, $info ['query'] ) = explode ( '?', $anchor, 2 );
+		}
+	}
+	// 解析参数
+	if (is_string ( $vars )) { // aaa=1&bbb=2 转换成数组
+		parse_str ( $vars, $vars );
+	} elseif (! is_array ( $vars )) {
+		$vars = array ();
+	}
+	if (isset ( $info ['query'] )) { // 解析地址里面参数 合并到vars
+		parse_str ( $info ['query'], $params );
+		$vars = array_merge ( $params, $vars );
+	}
+	// URL组装
+	if ($url) {
+		$url = trim ( $url, '/' );
+		$path = explode ( '/', $url );
+		$var = array ();
+		if (isset ( $path [2] )) $var ['action'] = $path [2];
+		if (isset ( $path [1] )) $var ['controller'] = $path [1];
+		$var ['app'] = isset ( $path [0] ) ? $path [0] : APP;
+	}
+	if (C ( 'config', 'url_model' ) == 0) { // 普通模式URL转换
+		$url = PHP_FILE . '?' . http_build_query ( array_reverse ( $var ) );
+		if (! empty ( $vars )) {
+			$vars = urldecode ( http_build_query ( $vars ) );
+			$url .= '&' . $vars;
+		}
+	} else if (C ( 'config', 'url_model' ) != 0) {
+		$url = WEB_PATH . implode ( '/', array_reverse ( $var ) );
+		if (! empty ( $vars )) { // 添加参数
+			$params = http_build_query ( $vars );
+			$url = $url . '?' . $params;
+		}
+	}
+	if ($domain) {
+		$url = SITE_PROTOCOL . SITE_HOST . $url;
+	}
+	if ($redirect) // 直接跳转URL
+		redirect ( $url );
+	else
+		return $url;
+}
+
+/**
  * 错误日志接口
  *
  * @param string $level 日志级别
@@ -322,4 +428,65 @@ function set_status_header($code = 200, $text = '') {
 function log_message($level = 'error', $message, $php_error = FALSE) {
 	if (C ( 'log', 'log_threshold' ) == 0) return;
 	Log::get_instance ()->write ( $level, $message, $php_error );
+}
+
+/**
+ * 程序执行时间
+ *
+ * @return int
+ */
+function execute_time() {
+	$etime = microtime ( true );
+	return number_format ( ($etime - START_TIME), 6 );
+}
+
+/**
+ * 使用phpqrcode生成二维码
+ *
+ * @param string $value 二维码数据
+ * @param string $level 纠错级别：L、M、Q、H
+ * @param int $size 点的大小：1到10,用于手机端4就可以了
+ */
+function qrcode($value, $level = 'L', $size = 4) {
+	Loader::lib ( 'QRcode.QRcode', false );
+	return QRcode::png ( $value, false, $level, $size );
+}
+
+/**
+ * 显示运行时间、数据库操作、缓存次数、内存使用信息
+ *
+ * @return string
+ */
+function show_time() {
+	if (! C ( 'config', 'show_time' )) return;
+	$show_time = '';
+	// 显示运行时间
+	$show_time = 'Process: ' . execute_time () . ' seconds ';
+	if (class_exists ( 'Core_DB', false )) $show_time .= ' | DB :' . N ( 'db_query' ) . ' queries ';
+	$show_time .= ' | Cache :' . N ( 'cache_read' ) . ' gets ' . N ( 'cache_write' ) . ' writes ';
+	// 显示内存开销
+	$startMem = array_sum ( explode ( ' ', START_MEMORY ) );
+	$endMem = array_sum ( explode ( ' ', memory_get_usage () ) );
+	$show_time .= ' | UseMem:' . number_format ( ($endMem - $startMem) / 1024 ) . ' kb';
+	if (IS_CLI) return "\r\n" . $show_time . "\r\n";
+	return $show_time;
+}
+/**
+ * 判断验证码是否正确
+ *
+ * @param string $checkcode
+ */
+function checkcode($checkcode = '') {
+	Loader::session (); // 加载Session
+	if (! empty ( $checkcode ) && (isset($_SESSION ['code']) && $_SESSION ['code'] == strtolower ( $checkcode ))) return true;
+	return false;
+}
+
+/**
+ * 获取IP地址归属地
+ * @param string $ip
+ * @return string
+ */
+function ip_source($ip){
+	return IpSource::instance()->get ( $ip );
 }

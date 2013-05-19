@@ -76,6 +76,7 @@ class String {
 	 *
 	 * @static
 	 *
+	 *
 	 * @access public
 	 * @param string $str 需要转换的字符串
 	 * @param string $start 开始位置
@@ -98,6 +99,29 @@ class String {
 			$slice = join ( "", array_slice ( $match [0], $start, $length ) );
 		}
 		return $suffix ? $slice . '...' : $slice;
+	}
+
+	/**
+	 * 提取两个字符串之间的值，不包括分隔符
+	 *
+	 * @param string $string 待提取的只付出
+	 * @param string $start 开始字符串
+	 * @param string|null $end 结束字符串，省略将返回所有的。
+	 * @return bool string substring between $start and $end or false if either
+	 *         string is not found
+	 *
+	 */
+	public static function substr_between($string, $start, $end = null) {
+		if (($start_pos = strpos ( $string, $start )) !== false) {
+			if ($end) {
+				if (($end_pos = strpos ( $string, $end, $start_pos + strlen ( $start ) )) !== false) {
+					return substr ( $string, $start_pos + strlen ( $start ), $end_pos - ($start_pos + strlen ( $start )) );
+				}
+			} else {
+				return substr ( $string, $start_pos );
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -227,10 +251,11 @@ class String {
 
 	/**
 	 * 自动转换字符集 支持数组转换
+	 *
 	 * @param string $string
 	 * @param string $from 源编码
 	 * @param string $to 输出编码
-	 * @return unknown|string|Ambigous <unknown, string>
+	 * @return unknown string Ambigous
 	 */
 	public static function auto_charset($string, $from = 'gbk', $to = 'utf-8') {
 		$from = strtoupper ( $from ) == 'UTF8' ? 'utf-8' : $from;

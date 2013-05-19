@@ -15,7 +15,7 @@ class IndexController extends Web_Controller {
 	 * 首页
 	 */
 	public function init() {
-		echo 444;
+		qrcode('ss/aa');
 		include V ( 'index' );
 	}
 }
