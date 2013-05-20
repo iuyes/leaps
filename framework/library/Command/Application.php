@@ -7,10 +7,19 @@
  * @version $Id$
  */
 class Command_Application extends Base_Application {
+
+	/**
+	 * !CodeTemplates.overridecomment.nonjd!
+	 * @see Base_Application::_initialize()
+	 */
 	public function _initialize(){
 
 	}
 
+	/**
+	 * !CodeTemplates.overridecomment.nonjd!
+	 * @see Base_Application::run()
+	 */
 	public function run() {
 		parent::run ();
 	}
@@ -20,7 +29,7 @@ class Command_Application extends Base_Application {
 	 * @see Base_Application::execute()
 	 */
 	protected function execute() {
-		$router = new Api_Router ();
+		$router = new Command_Router ();
 		define ( 'CONTROLLER', $router->get_controller () ); // 控制器名称
 		define ( 'ACTION', $router->get_action () ); // 事件名称
 		$controller = $this->controller ();
