@@ -4,7 +4,7 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-17
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Sqlite.php 550 2013-05-17 03:41:54Z 85825770@qq.com $
+ * @version $Id: Sqlite.php 2 2013-01-14 07:14:05Z xutongle $
  */
 class Database_Driver_Sqlite extends Core_DB {
 
@@ -15,7 +15,7 @@ class Database_Driver_Sqlite extends Core_DB {
 	 */
 	public function __construct($config = '') {
 		if (! extension_loaded ( 'sqlite' )) {
-			throw new Exception ( 'suppert does not exist.' . ':sqlite' );
+			throw_exception ( 'suppert does not exist.' . ':sqlite' );
 		}
 		if (! empty ( $config )) {
 			$this->config = $config;
@@ -34,7 +34,7 @@ class Database_Driver_Sqlite extends Core_DB {
 			$this->link = sqlite_open ( $this->config ['database'], $this->config ['mode'] );
 		}
 		if (! $this->link) {
-			throw new Exception ( sqlite_error_string () );
+			throw_exception ( sqlite_error_string () );
 		}
 		return $this->link;
 	}

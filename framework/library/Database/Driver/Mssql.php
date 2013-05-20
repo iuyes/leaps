@@ -4,9 +4,9 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-17
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Mssql.php 550 2013-05-17 03:41:54Z 85825770@qq.com $
+ * @version $Id: Mssql.php 2 2013-01-14 07:14:05Z xutongle $
  */
-class Database_Driver_Mssql extends Base_DB {
+class Database_Driver_Mssql extends Core_DB {
 
 	/**
 	 * 架构函数 读取数据库配置信息
@@ -16,7 +16,7 @@ class Database_Driver_Mssql extends Base_DB {
 	 */
 	public function __construct($config = '') {
 		if (! extension_loaded ( 'mssql' )) {
-			throw new Exception ( 'suppert does not exist.' . ':mssql' );
+			throw_exception ( 'suppert does not exist.' . ':mssql' );
 		}
 		if (! empty ( $config )) {
 			$this->config = $config;
@@ -38,7 +38,7 @@ class Database_Driver_Mssql extends Base_DB {
 			$this->link = mssql_connect ( $host, $this->config ['username'], $this->config ['password'] );
 		}
 		if (! $this->link) {
-			throw new Exception ( "Couldn't connect to SQL Server on $host" );
+			throw_exception ( "Couldn't connect to SQL Server on $host" );
 		}
 		$this->select_db ( $this->config ['database'] );
 		return $this->link;
@@ -49,7 +49,7 @@ class Database_Driver_Mssql extends Base_DB {
 	 */
 	public function select_db($database = null) {
 		if (! is_null ( $database ) && ! @mssql_select_db ( $database, $this->link )) {
-			throw new Exception ( "Couldn't open database  " . $database );
+			throw_exception ( "Couldn't open database  " . $database );
 			return false;
 		}
 		$this->database = $database;

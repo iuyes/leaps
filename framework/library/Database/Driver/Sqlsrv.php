@@ -4,15 +4,15 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-17
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Sqlsrv.php 550 2013-05-17 03:41:54Z 85825770@qq.com $
+ * @version $Id: Sqlsrv.php 2 2013-01-14 07:14:05Z xutongle $
  */
-class Database_Driver_Sqlsrv extends Base_DB {
+class Database_Driver_Sqlsrv extends Core_DB {
 
 	protected $select_sql = 'SELECT T1.* FROM (SELECT thinkphp.*, ROW_NUMBER() OVER (%ORDER%) AS ROW_NUMBER FROM (SELECT %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%) AS thinkphp) AS T1 %LIMIT%%COMMENT%';
 
 	public function __construct($config = '') {
 		if (! function_exists ( 'sqlsrv_connect' )) {
-			throw new Exception ( 'suppert does not exist.:sqlsrv' );
+			throw_exception ( 'suppert does not exist.:sqlsrv' );
 		}
 		if (! empty ( $config )) {
 			$this->config = $config;

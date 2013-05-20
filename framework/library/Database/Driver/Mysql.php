@@ -4,9 +4,9 @@
  *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-15
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
- * @version $Id: Mysql.php 550 2013-05-17 03:41:54Z 85825770@qq.com $
+ * @version $Id: Mysql.php 2 2013-01-14 07:14:05Z xutongle $
  */
-class Database_Driver_Mysql extends Base_DB {
+class Database_Driver_Mysql extends Core_DB {
 
 	/**
 	 * 数据库配置
@@ -28,7 +28,7 @@ class Database_Driver_Mysql extends Base_DB {
 	 */
 	public function __construct($config = '') {
 		if (! extension_loaded ( 'mysql' )) {
-			throw new Exception ( 'suppert does not exist.' . ':mysql' );
+			throw_exception ( 'suppert does not exist.' . ':mysql' );
 		}
 		if (! empty ( $config )) {
 			$this->config = $config;
@@ -48,7 +48,7 @@ class Database_Driver_Mysql extends Base_DB {
 			$this->link = mysql_connect ( $host, $this->config ['username'], $this->config ['password'], 1 );
 		}
 		if (! $this->link) {
-			throw new Exception ( "Couldn't connect to SQL Server on " . $this->config ['hostname'] );
+			throw_exception ( "Couldn't connect to SQL Server on " . $this->config ['hostname'] );
 		}
 		if ($this->version () > '4.1') {
 			// 设置数据库编码
@@ -71,7 +71,7 @@ class Database_Driver_Mysql extends Base_DB {
 	 */
 	public function select_db($database = null) {
 		if (! is_null ( $database ) && ! @mysql_select_db ( $database, $this->link )) {
-			throw new Exception ( 'Cannot use database ' . $database );
+			throw_exception ( 'Cannot use database ' . $database );
 			return false;
 		}
 		$this->database = $database;
