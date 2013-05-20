@@ -37,8 +37,7 @@ class Command_Application extends Base_Application {
 	 * @param string $controller
 	 * @param string $app
 	 */
-	public static function controller($controller = null, $app = null) {
-		$app = ! is_null ( $app ) ? trim ( $app ) : APP;
+	public static function controller($controller = null) {
 		$controller = ! is_null ( $controller ) ? trim ( $controller ) : CONTROLLER;
 		$classname = $controller . 'Controller';
 		import ( $classname, WEKIT_PATH . 'command' . DIRECTORY_SEPARATOR );
