@@ -347,7 +347,8 @@ abstract class Base_DB {
 		} else {
 			$fields_str = '*';
 		}
-		// TODO 如果是查询全部字段，并且是join的方式，那么就把要查的表加个别名，以免字段被覆盖
+		// 将#TABLE#这样的字符串替换成正规的表名,并且带上前缀和后缀
+		$join_str = preg_replace ( "/#([a-zA-Z_-]+)#/esU", $this->get_prefix () . ".strtolower('$1')", $join_str );
 		return $fields_str;
 	}
 
@@ -371,8 +372,8 @@ abstract class Base_DB {
 				$join_str .= ' LEFT JOIN ' . $join;
 			}
 		}
-		// 将__TABLE_NAME__这样的字符串替换成正规的表名,并且带上前缀和后缀
-		$join_str = preg_replace ( "/__([A-Z_-]+)__/esU", $this->get_prefix () . ".strtolower('$1')", $join_str );
+		// 将#TABLE#这样的字符串替换成正规的表名,并且带上前缀和后缀
+		$join_str = preg_replace ( "/#([a-zA-Z_-]+)#/esU", $this->get_prefix () . ".strtolower('$1')", $join_str );
 		return $join_str;
 	}
 
@@ -543,6 +544,8 @@ abstract class Base_DB {
 	 * @return string
 	 */
 	protected function parse_group($group) {
+		// 将#TABLE#这样的字符串替换成正规的表名,并且带上前缀和后缀
+		$join_str = preg_replace ( "/#([a-zA-Z_-]+)#/esU", $this->get_prefix () . ".strtolower('$1')", $join_str );
 		return ! empty ( $group ) ? ' GROUP BY ' . $group : '';
 	}
 
