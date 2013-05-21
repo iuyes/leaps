@@ -62,14 +62,12 @@ class Command_Application extends Base_Application {
 	 * @see Base_Application::showErrorMessage()
 	 */
 	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
-		if (IS_DEBUG) {
-			$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
-			list ( $fileLines, $trace ) = Utility::crash ( $file, $line, $trace );
-			foreach ( $trace as $key => $value ) {
-				$log .= $value . "\r\n";
-			}
-			log_message ( 'error', $log, TRUE );
+		$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
+		list ( $fileLines, $trace ) = Utility::crash ( $file, $line, $trace );
+		foreach ( $trace as $key => $value ) {
+			$log .= $value . "\r\n";
 		}
+		log_message ( 'error', $log, TRUE );
 		printf ( $message . ' in ' . $file . ' on line ' . $line );
 	}
 }
