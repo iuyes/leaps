@@ -490,3 +490,44 @@ function checkcode($checkcode = '') {
 function ip_source($ip){
 	return IpSource::instance()->get ( $ip );
 }
+
+function show_trace() {
+	if (! $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' && C ( 'config', 'show_trace' )) {
+		$trace_page_tabs = array ('BASE' => '基本','FILE' => '文件','INFO' => '流程','ERR|NOTIC' => '错误','SQL' => 'SQL','DEBUG' => '调试' ); // 页面Trace可定制的选项卡
+
+		// 系统默认显示信息
+		$files = get_included_files ();
+		$info = array ();
+		foreach ( $files as $key => $file ) {
+			$info [] = $file . ' ( ' . number_format ( filesize ( $file ) / 1024, 2 ) . ' KB )';
+		}
+		$trace = array ();
+		$base = array ('请求信息' => date ( 'Y-m-d H:i:s', $_SERVER ['REQUEST_TIME'] ) . ' ' . $_SERVER ['SERVER_PROTOCOL'] . ' ' . $_SERVER ['REQUEST_METHOD'] . ' : ' . $_SERVER ['REQUEST_URI'],'运行时间' => show_time (),
+				'内存开销' => MEMORY_LIMIT_ON ? number_format ( (memory_get_usage () - START_MEMORY) / 1024, 2 ) . ' kb' : '不支持','查询信息' => N ( 'db_query' ) . ' queries ' . N ( 'db_write' ) . ' writes ','文件加载' => count ( get_included_files () ),
+				'缓存信息' => N ( 'cache_read' ) . ' gets ' . N ( 'cache_write' ) . ' writes ','会话信息' => 'SESSION_ID=' . session_id () );
+		$debug = trace ();
+		foreach ( $trace_page_tabs as $name => $title ) {
+			switch (strtoupper ( $name )) {
+				case 'BASE' : // 基本信息
+					$trace [$title] = $base;
+					break;
+				case 'FILE' : // 文件信息
+					$trace [$title] = $info;
+					break;
+				default : // 调试信息
+					$name = strtoupper ( $name );
+					if (strpos ( $name, '|' )) { // 多组信息
+						$array = explode ( '|', $name );
+						$result = array ();
+						foreach ( $array as $name ) {
+							$result += isset ( $debug [$name] ) ? $debug [$name] : array ();
+						}
+						$trace [$title] = $result;
+					} else {
+						$trace [$title] = isset ( $debug [$name] ) ? $debug [$name] : '';
+					}
+			}
+		}
+	}
+	include FW_PATH . 'errors' . DIRECTORY_SEPARATOR . 'trace.php';
+}
