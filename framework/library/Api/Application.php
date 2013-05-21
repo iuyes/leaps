@@ -77,15 +77,5 @@ class Api_Application extends Base_Application {
 		}
 	}
 
-	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
-		parent::showErrorMessage ( $message, $file, $line, $trace, $errorcode );
-		if (IS_DEBUG) {
-			// 包含异常页面模板
-			ob_start ();
-			include (FW_PATH . 'errors/error_php.php');
-			$buffer = ob_get_contents ();
-			ob_end_clean ();
-			die ( $buffer );
-		}
-	}
+
 }

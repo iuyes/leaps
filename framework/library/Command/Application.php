@@ -56,4 +56,20 @@ class Command_Application extends Base_Application {
 			throw new Exception ( 'Unable to create instance for ' . $classname . ' , class is not exist.' );
 		}
 	}
+
+	/**
+	 * !CodeTemplates.overridecomment.nonjd!
+	 * @see Base_Application::showErrorMessage()
+	 */
+	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
+		if (IS_DEBUG) {
+			$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
+			list ( $fileLines, $trace ) = Utility::crash ( $file, $line, $trace );
+			foreach ( $trace as $key => $value ) {
+				$log .= $value . "\r\n";
+			}
+			log_message ( 'error', $log, TRUE );
+		}
+		printf ( $message . ' in ' . $file . ' on line ' . $line );
+	}
 }
