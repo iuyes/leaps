@@ -7,7 +7,7 @@
  * @license http://leaps.yuncms.net
  * @version $Id: Checkcode.php 564 2013-05-17 09:34:41Z 85825770@qq.com $
  */
-class Checkcode {
+class Captcha {
 
 	/**
 	 * 输出类型
@@ -18,19 +18,26 @@ class Checkcode {
 	 */
 	protected $image_type = 'png';
 
-	// 默认配置
-	public $config = array ('width' => 150,'height' => 50,'complexity' => 4,'background' => '','fonts' => array (
-			'DejaVuSerif.ttf',
-			'FetteSteinschrift.ttf',
-	'STXINWEI.TTF'
-	),'promote' => false,'life' => 1800 );
+	/**
+	 * 默认配置
+	 * @var array
+	 */
+	public $config = array ('width' => 150,'height' => 50,'complexity' => 4,'background' => '','fonts' => array ('DejaVuSerif.ttf','FetteSteinschrift.ttf','STXINWEI.TTF' ),'promote' => false,'life' => 1800 );
+
 	protected $image;
+
 	protected $response = '';
+
+	/**
+	 * 构造方法
+	 * @param string $config
+	 */
 	public function __construct($config = false) {
 		if (is_array ( $config )) {
 			$this->config = array_merge ( $this->config, $config );
 		}
 	}
+
 	public function render() {
 		if (empty ( $this->response )) {
 			$this->creat_code ();
@@ -68,6 +75,10 @@ class Checkcode {
 		}
 		return $this->image_render ();
 	}
+
+	/**
+	 * 输出图片
+	 */
 	protected function image_render() {
 		header ( "Cache-Control:no-cache,must-revalidate" );
 		header ( "Pragma:no-cache" );
@@ -95,7 +106,6 @@ class Checkcode {
 			imagefilledrectangle ( $this->image, 0, $this->config ['height'], $this->config ['width'], 0, $background );
 		}
 	}
-
 	protected function image_gradient($color1, $color2, $direction = null) {
 		$directions = array ('horizontal','vertical' );
 		if (! in_array ( $direction, $directions )) {
