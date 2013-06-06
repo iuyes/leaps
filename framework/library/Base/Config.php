@@ -107,7 +107,7 @@ class Base_Config {
 	 */
 	private static function _write($file, $array = array()) {
 		$data = "<?php\nreturn " . var_export ( $array, true ) . ';';
-		if (File::write ( $file, $data )) throw new Exception ( "$file is not exists or not writable" );
+		if (Utils_File::write ( $file, $data )) throw new Exception ( "$file is not exists or not writable" );
 		return true;
 	}
 }

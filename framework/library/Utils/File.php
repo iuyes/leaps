@@ -1,12 +1,12 @@
 <?php
 /**
- *
+ * 文件处理类
  * @author Tongle Xu <xutongle@gmail.com> 2013-5-14
  * @copyright Copyright (c) 2003-2103 tintsoft.com
  * @license http://www.tintsoft.com
  * @version $Id: File.php 546 2013-05-17 03:39:11Z 85825770@qq.com $
  */
-class File {
+class Utils_File {
 
 	/**
 	 * 文件读取模式

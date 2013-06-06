@@ -75,9 +75,9 @@ abstract class Base_View {
 	 * @return number
 	 */
 	public function refresh($tplfile) {
-		$str = File::read ( $tplfile );
+		$str = Utils_File::read ( $tplfile );
 		$str = $this->parse ( $str );
-		$strlen = File::write($this->compilefile, $str);
+		$strlen = Utils_File::write($this->compilefile, $str);
 		return $strlen;
 	}
 

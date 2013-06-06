@@ -45,7 +45,7 @@ class Cache_Driver_File extends Cache {
 	 */
 	protected function set_value($key, $value, $expires = 0) {
 		$file = $this->_path ( $key );
-		return File::write ( $file, $value ) == strlen ( $value );
+		return Utils_File::write ( $file, $value ) == strlen ( $value );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Cache_Driver_File extends Cache {
 	 */
 	protected function get_value($key) {
 		$file = $this->_path ( $key );
-		return File::read ( $file );
+		return Utils_File::read ( $file );
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Cache_Driver_File extends Cache {
 	 */
 	protected function delete_value($key) {
 		$file = $this->_path ( $key );
-		return File::del ( $file );
+		return Utils_File::del ( $file );
 	}
 
 	/**
