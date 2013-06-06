@@ -7,6 +7,7 @@
  * @license http://www.tintsoft.com
  * @version $Id$
  */
+
 class Utils_Idcard {
 	/**
 	 * 中国公民身份证号码最小长度。
@@ -69,9 +70,7 @@ class Utils_Idcard {
 			return null;
 		}
 		if (self::isNum ( $idCard )) {
-			// 获取出生年月日
-			$sYear = '19' . substr ( $idCard, 6, 2 );
-			$idCard18 = substr ( $idCard, 0, 6 ) . $sYear . substr ( $idCard, 8 );
+			$idCard18 = substr ( $idCard, 0, 6 ) . '19' . substr ( $idCard, 6 );
 			// 转换字符数组
 			$iArr = str_split ( $idCard18 );
 			if ($iArr != null) {
