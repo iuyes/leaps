@@ -7,7 +7,7 @@
  * @license http://www.tintsoft.com
  * @version $Id: String.php 564 2013-05-17 09:34:41Z 85825770@qq.com $
  */
-class String {
+class Utils_String {
 
 	/**
 	 * 生成UUID 单机使用
@@ -28,7 +28,7 @@ class String {
 	 * @return Boolean
 	 */
 	public static function key_gen() {
-		return str_replace ( '-', '', substr ( String::uuid (), 1, - 1 ) );
+		return str_replace ( '-', '', substr ( Utils_String::uuid (), 1, - 1 ) );
 	}
 
 	/**
@@ -220,13 +220,13 @@ class String {
 				$char = substr ( $format, $i, 1 );
 				switch ($char) {
 					case "*" : // 字母和数字混合
-						$strtemp .= String::rand_string ( 1 );
+						$strtemp .= Utils_String::rand_string ( 1 );
 						break;
 					case "#" : // 数字
-						$strtemp .= String::rand_string ( 1, 1 );
+						$strtemp .= Utils_String::rand_string ( 1, 1 );
 						break;
 					case "$" : // 大写字母
-						$strtemp .= String::rand_string ( 1, 2 );
+						$strtemp .= Utils_String::rand_string ( 1, 2 );
 						break;
 					default : // 其他格式均不转换
 						$strtemp .= $char;

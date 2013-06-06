@@ -71,7 +71,7 @@ class Cache_Driver_File extends Cache {
 	 * @see Cache::clear()
 	 */
 	public function clear() {
-		return Folder::clear ( CACHE_PATH );
+		return Utils_Folder::clear ( CACHE_PATH );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Cache_Driver_File extends Cache {
 			$path = CACHE_PATH . $key . $this->suffix;
 		}
 		$dir = dirname ( $path );
-		if (! is_dir ( $dir )) Folder::mk ( $dir, 0777 );
+		if (! is_dir ( $dir )) Utils_Folder::mk ( $dir, 0777 );
 		return $path;
 	}
 

@@ -25,7 +25,7 @@ class Cookie {
 	 */
 	public static function get($var, $default = '') {
 		$var = C ( 'cookie', 'prefix', 'yuncms_' ) . $var;
-		return isset ( $_COOKIE [$var] ) ? String::authcode ( $_COOKIE [$var], 'DECODE' ) : $default;
+		return isset ( $_COOKIE [$var] ) ? Utils_String::authcode ( $_COOKIE [$var], 'DECODE' ) : $default;
 	}
 
 	/**
@@ -44,7 +44,7 @@ class Cookie {
 		$s = $_SERVER ['SERVER_PORT'] == '443' ? 1 : 0;
 		$var = C ( 'cookie', 'prefix', 'yuncms_' ) . $var;
 		$_COOKIE [$var] = $value;
-		setcookie ( $var, String::authcode ( $value, 'ENCODE' ), $time, C ( 'cookie', 'path', '/' ), C ( 'cookie', 'domain', '' ), $s );
+		setcookie ( $var, Utils_String::authcode ( $value, 'ENCODE' ), $time, C ( 'cookie', 'path', '/' ), C ( 'cookie', 'domain', '' ), $s );
 	}
 
 	/**

@@ -60,7 +60,7 @@ abstract class Base_View {
 			throw new Exception ( 'Unable to load the file ' . $tplfile . ' , file is not exist.' );
 		}
 		$filepath = $this->compile_dir . $style . DIRECTORY_SEPARATOR . $application . DIRECTORY_SEPARATOR;
-		if (! is_dir ( $filepath )) Folder::mk($filepath);
+		if (! is_dir ( $filepath )) Utils_Folder::mk($filepath);
 		$this->compilefile = $filepath . $template . '.php';
 		if (! file_exists ( $this->compilefile ) || ($this->_referesh && (@filemtime ( $tplfile ) > @filemtime ( $this->compilefile )))) {
 			$this->refresh ( $tplfile);

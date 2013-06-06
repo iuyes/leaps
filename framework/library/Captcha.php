@@ -151,7 +151,7 @@ class Captcha {
 	 * 生成随机验证码。
 	 */
 	public function creat_code() {
-		$this->response = String::rand_string ( 4 );
+		$this->response = Utils_String::rand_string ( 4 );
 		Factory::session ();
 		$_SESSION ['code'] = strtolower ( $this->response );
 	}
