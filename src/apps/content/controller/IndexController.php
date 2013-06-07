@@ -6,7 +6,6 @@
  * @version $Id: IndexController.php 6 2013-01-16 03:57:50Z xutongle $
  */
 class IndexController extends Web_Controller {
-
 	public function __construct() {
 		parent::__construct ();
 	}
@@ -15,7 +14,6 @@ class IndexController extends Web_Controller {
 	 * 首页
 	 */
 	public function init() {
-		//qrcode('ss/aa');
 		include V ( 'index' );
 	}
 }
