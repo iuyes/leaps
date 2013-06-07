@@ -6,8 +6,8 @@
  * @license http://www.tintsoft.com/html/about/copyright/
  * @version $Id$
  */
-define ( 'LEAPS_VERSION', '1.2.0' );
-define ( 'LEAPS_RELEASE', '20121210' );
+define ( 'LEAPS_VERSION', '2.0.0' );
+define ( 'LEAPS_RELEASE', '20130531S' );
 define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
 ! defined ( 'IS_DEBUG' ) && define ( 'IS_DEBUG', false );
 class Core {
