@@ -69,7 +69,6 @@ class Admin_Controller{
 	final public function view($file, $application = '') {
 		$application = empty ( $application ) ? APP : $application;
 		if (empty ( $application )) return false;
-		echo APPS_PATH . $application . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $file . '.tpl.php';
 		return APPS_PATH . $application . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $file . '.tpl.php';
 	}
 
@@ -118,7 +117,7 @@ class Admin_Controller{
 	 */
 	public function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $returnjs = '') {
 		if ($ms == 301) {
-			Loader::session ();
+			Factory::session ();
 			$_SESSION ['msg'] = $msg;
 			Header ( "HTTP/1.1 301 Moved Permanently" );
 			Header ( "Location: $url_forward" );

@@ -88,8 +88,10 @@ abstract class Base_Application {
 			$_GET ['page'] = max ( intval ( $_GET ['page'] ), 1 );
 		}
 		set_error_handler ( array ($this,'_errorHandle' ), error_reporting () );
-		set_exception_handler ( array ($this,'_exceptionHandle' ) );
-		//register_shutdown_function ( array ($this,'_shutdownHandle' ) );
+		if (IS_DEBUG) {
+			set_exception_handler ( array ($this,'_exceptionHandle' ) );
+			register_shutdown_function ( array ($this,'_shutdownHandle' ) );
+		}
 	}
 
 	/**
@@ -122,24 +124,24 @@ abstract class Base_Application {
 	 * @param int $errline 错误所在行
 	 */
 	public function _errorHandle($errno, $errstr, $errfile, $errline) {
-		restore_error_handler ();
-		restore_exception_handler ();
-		$trace = debug_backtrace ();
-		unset ( $trace [0] ["function"], $trace [0] ["args"] );
-		Core::debug ()->error ( $this->_get_errorname ( $errno ) . ': ' . $errstr . ' in ' . $errfile . ' on line ' . $errline );
-		$this->showErrorMessage ( $this->_get_errorname ( $errno ) . ': ' . $errstr, $errfile, $errline, $trace, $errno );
+		if ($errno & IS_DEBUG) {
+			restore_error_handler ();
+			restore_exception_handler ();
+			$trace = debug_backtrace ();
+			unset ( $trace [0] ["function"], $trace [0] ["args"] );
+			Core::debug ()->error ( $this->_get_errorname ( $errno ) . ': ' . $errstr . ' in ' . $errfile . ' on line ' . $errline );
+			$this->showErrorMessage ( $this->_get_errorname ( $errno ) . ': ' . $errstr, $errfile, $errline, $trace, $errno );
+		}
 	}
 
 	/**
 	 * 致命错误捕捉
 	 */
 	public function _shutdownHandle() {
-		if (($errno = error_get_last ()) && $errno ['type']) {
-			restore_error_handler ();
-			restore_exception_handler ();
-			$trace = debug_backtrace ();
-			unset ( $trace [0] ["function"], $trace [0] ["args"] );
-			$this->_errorHandle ( $errno['type'], $errno ['message'], $errno ['file'], $errno ['line'] );
+		if (($error = error_get_last ()) && $error ['type'] & IS_DEBUG) {
+			$this->_errorHandle ( $error ['type'], $error ['message'], $error ['file'], $error ['line'] );
+			// discuz_error::system_error($error['message'], false, true,
+		// false);
 		}
 	}
 
