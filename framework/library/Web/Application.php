@@ -82,39 +82,6 @@ class Web_Application extends Base_Application {
 
 	/**
 	 * !CodeTemplates.overridecomment.nonjd!
-	 * @see Base_Application::_errorHandle()
-	 */
-	public function _errorHandle($errno, $errstr, $errfile, $errline) {
-		restore_error_handler ();
-		restore_exception_handler ();
-		$trace = debug_backtrace ();
-		unset ( $trace [0] ["function"], $trace [0] ["args"] );
-		Core::debug ()->error ( $this->_get_errorname ( $errno ) . ': ' . $errstr . ' in ' . $errfile . ' on line ' . $errline );
-		$this->showErrorMessage ( $this->_get_errorname ( $errno ) . ': ' . $errstr, $errfile, $errline, $trace, $errno );
-	}
-
-	/**
-	 * !CodeTemplates.overridecomment.nonjd!
-	 * @see Base_Application::_exceptionHandle()
-	 */
-	public function _exceptionHandle($exception) {
-		restore_error_handler ();
-		restore_exception_handler ();
-		$trace = $exception->getTrace ();
-		if (@$trace [0] ['file'] == '') {
-			unset ( $trace [0] );
-			$trace = array_values ( $trace );
-		}
-		$file = @$trace [0] ['file'];
-		$line = @$trace [0] ['line'];
-		if (C ( 'config', 'firephp', false ) && class_exists ( 'FB' )) { // FirePHP调试
-			fb ( $exception );
-		}
-		$this->showErrorMessage ( $exception->getMessage (), $file, $line, $trace, $exception->getCode () );
-	}
-
-	/**
-	 * !CodeTemplates.overridecomment.nonjd!
 	 * @see Base_Application::showErrorMessage()
 	 */
 	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {

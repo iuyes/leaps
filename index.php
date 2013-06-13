@@ -6,5 +6,6 @@
  * @license http://www.tintsoft.com/html/about/copyright/
  * @version $Id$
  */
+define ( 'IS_DEBUG', true);
 require_once 'src/wekit.php';
 Wekit::run();

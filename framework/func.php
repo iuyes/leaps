@@ -7,7 +7,6 @@
  * @version $Id$
  */
 define ( 'CORE_FUNCTION', true );
-
 /**
  * 返回经addslashes处理过的字符串或数组
  *

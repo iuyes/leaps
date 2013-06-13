@@ -1,6 +1,7 @@
 <?php
 /**
  * 核心入口
+ *
  * @author Tongle Xu <xutongle@gmail.com>
  * @copyright Copyright (c) 2003-2103 Jinan TintSoft development co., LTD
  * @license http://www.tintsoft.com/html/about/copyright/
@@ -9,7 +10,7 @@
 define ( 'LEAPS_VERSION', '2.0.0' );
 define ( 'LEAPS_RELEASE', '20130531S' );
 define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
-! defined ( 'IS_DEBUG' ) && define ( 'IS_DEBUG', false );
+defined ( 'IS_DEBUG' ) || define ( 'IS_DEBUG', false );
 class Core {
 	public static $_imports = array ();
 	private static $_frontController = null;
@@ -35,6 +36,7 @@ class Core {
 		define ( 'IS_CGI', substr ( PHP_SAPI, 0, 3 ) == 'cgi' ? true : false );
 		define ( 'IS_WIN', strstr ( PHP_OS, 'WIN' ) ? true : false );
 		define ( 'IS_CLI', PHP_SAPI == 'cli' ? true : false );
+		IS_DEBUG ? error_reporting ( E_ALL ) : error_reporting ( 0 );
 		spl_autoload_register ( array ('Core','autoload' ) );
 		if (! defined ( 'CORE_FUNCTION' ) && ! @include (FW_PATH . 'func.php')) exit ( 'func.php is missing' );
 	}
