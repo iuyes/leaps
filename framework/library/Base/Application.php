@@ -124,7 +124,7 @@ abstract class Base_Application {
 	 * @param int $errline 错误所在行
 	 */
 	public function _errorHandle($errno, $errstr, $errfile, $errline) {
-		if ($errno & IS_DEBUG) {
+		if (($errno & IS_DEBUG)  && $errno != E_ERROR) {
 			restore_error_handler ();
 			restore_exception_handler ();
 			$trace = debug_backtrace ();
@@ -140,8 +140,6 @@ abstract class Base_Application {
 	public function _shutdownHandle() {
 		if (($error = error_get_last ()) && $error ['type'] & IS_DEBUG) {
 			$this->_errorHandle ( $error ['type'], $error ['message'], $error ['file'], $error ['line'] );
-			// discuz_error::system_error($error['message'], false, true,
-		// false);
 		}
 	}
 

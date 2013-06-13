@@ -69,7 +69,7 @@ class Core {
 			self::$_imports [$filePath] = $fileName;
 			self::autoload ( $fileName, $path );
 		} else {
-			throw new Exception ( 'Unable to load the file ' . $path . ' , file is not exist.' );
+			throw new Exception('Oops! System file lost: '.$path);
 		}
 		return $fileName;
 	}
