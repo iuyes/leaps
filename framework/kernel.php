@@ -39,6 +39,7 @@ class Core {
 		IS_DEBUG ? error_reporting ( E_ALL ) : error_reporting ( 0 );
 		spl_autoload_register ( array ('Core','autoload' ) );
 		if (! defined ( 'CORE_FUNCTION' ) && ! @include (FW_PATH . 'func.php')) exit ( 'func.php is missing' );
+		if (! defined ( 'CUSTOM_FUNCTION' ) && ! @include (FW_PATH . 'custom.php')) exit ( 'custom.php is missing' );
 	}
 
 	/**

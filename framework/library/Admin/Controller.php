@@ -17,7 +17,7 @@ class Admin_Controller{
 	 * 构造方法
 	 */
 	public function __construct() {
-		Factory::session ();
+		Loader::session ();
 		if (method_exists ( $this, '_initialize' )) $this->_initialize ();
 		self::check_admin ();
 	}
