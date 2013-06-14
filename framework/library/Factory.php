@@ -76,23 +76,6 @@ class Factory {
 		return self::$instances ['queue'] [$setting];
 	}
 
-	/**
-	 * 加载Session
-	 */
-	public static function session() {
-		if (! isset ( self::$instances ['session'] )) {
-			if (function_exists ( 'ini_set' )) @ini_set ( 'session.gc_maxlifetime', C ( 'session', 'maxlifetime' ) );
-			session_cache_expire ( C ( 'session', 'cache_expire' ) );
-			session_set_cookie_params ( C ( 'session', 'cookie_lifetime' ), C ( 'session', 'cookie_path' ), C ( 'session', 'cookie_domain' ) );
-			Session_Abstract::get_instance ( C ( 'session' ) );
-			if (isset ( $_GET ['sid'] ) && ! empty ( $_GET ['sid'] )) session_id ( trim ( $_GET ['sid'] ) );
-			session_start ();
-			define ( 'SID', session_id () );
-			self::$instances ['session'] = true;
-		}
-		return self::$instances ['session'];
-	}
-
 	public static function db($db_config = '') {
 		if (! empty ( $db_config ) && is_string ( $db_config )) { // 不为空并且是字符串
 			$i_name = $db_config;

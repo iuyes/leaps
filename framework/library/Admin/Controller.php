@@ -26,11 +26,11 @@ class Admin_Controller{
 	 * 判断用户是否已经登陆
 	 */
 	final public function check_admin() {
-		if (APP == 'admin' && CONTROLLER == 'Index' && in_array ( ACTION, array ('login' ) )) {
+		if (APP == 'system' && CONTROLLER == 'Index' && in_array ( ACTION, array ('login' ) )) {
 			return true;
 		} else {
 			if (! isset ( $_SESSION ['userid'] ) || ! isset ( $_SESSION ['roleid'] ) || ! $_SESSION ['userid'] || ! $_SESSION ['roleid']) {
-				$this->showmessage ( L ( 'admin_login' ), U ( 'admin/index/login' ) );
+				$this->showmessage ( L ( 'admin_login' ), U ( 'system/index/login' ) );
 			}
 		}
 	}

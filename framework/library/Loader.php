@@ -10,6 +10,23 @@ class Loader{
 	private static $instances = array ();
 
 	/**
+	 * 加载Session
+	 */
+	public static function session() {
+		if (! isset ( self::$instances ['session'] )) {
+			if (function_exists ( 'ini_set' )) @ini_set ( 'session.gc_maxlifetime', C ( 'session', 'maxlifetime' ) );
+			session_cache_expire ( C ( 'session', 'cache_expire' ) );
+			session_set_cookie_params ( C ( 'session', 'cookie_lifetime' ), C ( 'session', 'cookie_path' ), C ( 'session', 'cookie_domain' ) );
+			Session_Abstract::get_instance ( C ( 'session' ) );
+			if (isset ( $_GET ['SID'] ) && ! empty ( $_GET ['SID'] )) session_id ( trim ( $_GET ['SID'] ) );
+			session_start ();
+			define ( 'SID', session_id () );
+			self::$instances ['session'] = true;
+		}
+		return self::$instances ['session'];
+	}
+
+	/**
 	 * 加载模型
 	 *
 	 * @param $model
