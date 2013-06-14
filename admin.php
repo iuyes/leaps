@@ -6,4 +6,5 @@
  * @license http://www.tintsoft.com
  * @version $Id$
  */
-header ( 'location:index.php?app=admin' );
+require_once 'src/wekit.php';
+Wekit::run('Admin');
