@@ -35,31 +35,6 @@ class Admin_Controller{
 	}
 
 	/**
-	 * 当前位置
-	 *
-	 * @param $id 菜单id
-	 */
-	final public static function current_pos($id) {
-		$menudb = Loader::model ( 'admin_menu_model' );
-		$r = $menudb->where ( array ('id' => $id ))->field( 'id,name,parentid' )->find();
-		$str = '';
-		if ($r ['parentid']) {
-			$str = self::current_pos ( $r ['parentid'] );
-		}
-		return $str . L ( $r ['name'] ) . ' > ';
-	}
-
-	/**
-	 * 检查锁屏状态
-	 */
-	final private function lock_screen() {
-		if (isset ( $_SESSION ['lock_screen'] ) && $_SESSION ['lock_screen'] == 1) {
-			if (preg_match ( '/^public_/', ACTION ) || (APP == 'content' && CONTROLLER == 'Create_html') || (ACTION == 'login') || (APP == 'search' && CONTROLLER == 'Search_admin' && ACTION == 'createindex')) return true;
-			$this->showmessage ( L ( 'admin_login' ), U ( 'admin/index/login' ) );
-		}
-	}
-
-	/**
 	 * 加载后台模板
 	 *
 	 * @param string $file 文件名
@@ -68,7 +43,9 @@ class Admin_Controller{
 	final public function view($file, $application = '') {
 		$application = empty ( $application ) ? APP : $application;
 		if (empty ( $application )) return false;
-		return APPS_PATH . $application . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $file . '.tpl.php';
+		$path = APPS_PATH . $application . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $file . '.tpl.php';
+		if(!file_exists($path)) throw new Exception('Oops! System file lost: '.$path);
+		return $path;
 	}
 
 	/**

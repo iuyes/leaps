@@ -21,7 +21,6 @@ class Wekit {
 	 * @param array $config
 	 */
 	public static function init($type = 'Web', $config = array()){
-		//Loader::helper('Global');
 		return Core::application ( $type, $config );
 	}
 
