@@ -10,6 +10,7 @@ class Admin_Application extends Base_Application {
 	public function _initialize() {
 		@header ( 'Content-Type: text/html; charset=' . CHARSET );
 		@header ( 'X-Powered-By: PHP/' . PHP_VERSION . ' Leaps/' . LEAPS_VERSION );
+		define ( 'IN_ADMIN', true );
 		/* 协议 */
 		define ( 'SITE_PROTOCOL', Web_Request::is_ssl () ? 'https://' : 'http://' );
 		/* 主机名 */
@@ -18,7 +19,7 @@ class Admin_Application extends Base_Application {
 		define ( 'SITE_URL', htmlspecialchars ( Web_Request::get_base_url ( true ) ) . '/' );
 		/* 设置来源 */
 		define ( 'HTTP_REFERER', Web_Request::get_referer () );
-		//Web_Filter::input ();
+		Web_Filter::input ();
 	}
 
 	public function run() {

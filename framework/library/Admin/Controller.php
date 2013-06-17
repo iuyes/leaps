@@ -7,7 +7,6 @@
  * @version $Id$
  */
 defined ( 'IN_YUNCMS' ) or exit ( 'No permission resources.' );
-define ( 'IN_ADMIN', true );
 class Admin_Controller{
 
 	public $userid;

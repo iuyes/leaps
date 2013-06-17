@@ -71,7 +71,6 @@ class Web_Application extends Base_Application {
 		$app = ! is_null ( $app ) ? trim ( $app ) : APP;
 		$controller = ! is_null ( $controller ) ? trim ( $controller ) : CONTROLLER;
 		$classname = $controller . 'Controller';
-		//$path = APPS_PATH . $app . DIRECTORY_SEPARATOR . 'controller'.DIRECTORY_SEPARATOR . $classname.'php';
 		import ( $app . ':controller.' . $classname );
 		if (class_exists ( $classname, false )) {
 			return new $classname ();
