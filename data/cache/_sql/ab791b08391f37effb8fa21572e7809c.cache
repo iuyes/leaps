@@ -1,1 +1,0 @@
-a:3:{s:4:"data";s:76:"SELECT * FROM `yun_admin_panel` WHERE ( `userid` = null ) ORDER BY datetime ";s:7:"expires";i:0;s:5:"store";i:1371094434;}
