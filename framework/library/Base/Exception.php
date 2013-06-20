@@ -1,7 +1,5 @@
 <?php
 /**
- *
- *
  * 异常基类
  *
  * @author Tongle Xu <xutongle@gmail.com>

@@ -9,6 +9,14 @@
  * @version $Id$
  */
 /**
+ * Gets the framework version.
+ */
+define ( 'LEAPS_VERSION', '2.0.0' );
+/**
+ * Gets the framework release.
+ */
+define ( 'LEAPS_RELEASE', '20130531S' );
+/**
  * Gets the application start timestamp.
  */
 defined ( 'START_TIME' ) or define ( 'START_TIME', microtime ( true ) );
@@ -20,7 +28,7 @@ defined ( 'FW_PATH' ) or define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SE
  * This constant defines whether the application should be in debug mode or not.
  * Defaults to false.
  */
-defined ( 'LEAPS_DEBUG' ) or define ( 'LEAPS_DEBUG', false );
+defined ( 'IS_DEBUG' ) or define ( 'IS_DEBUG', false );
 /**
  * This constant defines whether the application should be in cig mode or not.
  */
@@ -50,7 +58,7 @@ class Kernel {
 	 * @param string $type
 	 * @param array 应用程序配置
 	 */
-	public static function create_application($type = 'Web', $config = array()) {
+	public static function application($type = 'Web', $config = array()) {
 		$_className = $type . '_Application';
 		return new $_className ( $config );
 	}
@@ -105,7 +113,6 @@ class Kernel {
 		spl_autoload_register ( array ('Kernel','autoload' ) );
 		if (! defined ( 'CORE_FUNCTION' ) && ! @include (FW_PATH . 'func.php')) exit ( 'func.php is missing' );
 		if (! defined ( 'CUSTOM_FUNCTION' ) && ! @include (FW_PATH . 'custom.php')) exit ( 'custom.php is missing' );
-		$a = new Base_Db ();
 	}
 
 	/**
@@ -131,69 +138,36 @@ class Kernel {
 	 * @return boolean
 	 */
 	public static function import($filePath, $base = null) {
-		if (isset ( self::$_imports [$filePath] )) return self::$_imports [$filePath];
-		if (($pos = strrpos ( $filePath, '.' )) !== false)
-			$fileName = substr ( $filePath, $pos + 1 );
-		elseif (($pos = strrpos ( $filePath, ':' )) !== false)
-			$fileName = substr ( $filePath, $pos + 1 );
-		else
+		if (! isset ( self::$_imports [$filePath] )) {
 			$fileName = $filePath;
-
-		self::_setImport ( $fileName, $filePath );
-
-		if (is_null ( $base )) $base = FW_PATH;
-		if (($pos = strrpos ( $alias, '.' )) !== false) {
-			$path = str_replace ( '.', DIRECTORY_SEPARATOR, $alias );
+			if (($pos = strrpos ( $filePath, ':' )) !== false) { // 如果是：分割则导入应用下的文件
+				$base = APPS_PATH . substr ( $filePath, 0, $pos ) . DIRECTORY_SEPARATOR;
+				$fileName = substr ( $filePath, $pos + 1 );
+			}
+			if (strpos ( $fileName, '.' ) !== false) {
+				$fileName = str_replace ( '.', DIRECTORY_SEPARATOR, $fileName );
+			}
+			$path = (! is_null ( $base ) ? $base : FW_PATH) . $fileName . '.php';
+			if (is_file ( $path ) && self::_file_exists ( $path )) {
+				self::$_imports [$filePath] = include $path;
+			} else {
+				throw new Base_Exception ( 'Unable to load the file ' . $path . ' , file is not exist.' );
+			}
 		}
-
-		// $namespace = ! empty ( $folder ) ? $folder : self::get_alias_path (
-		// $alias );
-		// $path = $namespace . '.php';
-		echo $path;
-		exit ();
-
-		if (($pos = strrpos ( $alias, '.' )) !== false)
-			$className = substr ( $alias, $pos + 1 );
-		elseif (($pos = strrpos ( $alias, ':' )) !== false)
-			$className = substr ( $alias, $pos + 1 );
-		else
-			$className = $alias;
+		return self::$_imports [$filePath];
 	}
 
-	/**
-	 * 将别名翻译成文件路径
-	 *
-	 * @param string $alias 别名 (e.g. web.Controller)
-	 * @return mixed 文件路径对应的别名
-	 */
-	public static function get_alias_path($alias) {
-		if (false !== ($pos = strpos ( $alias, ':' ))) {
-			$path = APPS_PATH . substr ( $alias, 0, $pos ) . DIRECTORY_SEPARATOR . str_replace ( '.', '/', substr ( $alias, $pos + 1 ) );
-		} else {
-			$path = FW_PATH . str_replace ( '.', '/', $alias );
+	private static function _file_exists($filename) {
+		if (is_file ( $filename )) {
+			if (IS_WIN) {
+				if (basename ( realpath ( $filename ) ) != basename ( $filename )) return false;
+			}
+			return true;
 		}
-		return $path;
-	}
-
-	/**
-	 * 获取核心版本
-	 *
-	 * @return string the version of Leaps framework
-	 */
-	public static function get_version() {
-		return '2.0.0';
-	}
-
-	/**
-	 * Returns a string that can be displayed on your Web page showing
-	 * Powered-by-Leaps information
-	 *
-	 * @return string a string that can be displayed on your Web page showing
-	 *         Powered-by-Leaps information
-	 */
-	public static function powered() {
-		return 'Powered by <a href="http://leaps.tintsoft.com/" rel="external">Leaps Framework</a>';
+		return false;
 	}
 }
-Kernel::init ();
-?>
+class Core extends Kernel{
+
+}
+Core::init ();

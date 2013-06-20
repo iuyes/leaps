@@ -10,4 +10,4 @@
  * @version $Id$
  */
 require_once 'src/wekit.php';
-Kernel::import("aaa.bb");
+Wekit::run();
