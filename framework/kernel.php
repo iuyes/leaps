@@ -30,6 +30,18 @@ defined ( 'FW_PATH' ) or define ( 'FW_PATH', dirname ( __FILE__ ) . DIRECTORY_SE
  */
 defined ( 'IS_DEBUG' ) or define ( 'IS_DEBUG', false );
 /**
+ * This constant defines PHP file suffix.
+ */
+define( 'EXT', '.php' );
+/**
+ * This constant defines line break.
+ */
+define( 'CRLF', "\r\n" );
+/**
+ * This constant defines directory separator.
+ */
+define( 'DS', DIRECTORY_SEPARATOR );
+/**
  * This constant defines whether the application should be in cig mode or not.
  */
 define ( 'IS_CGI', substr ( PHP_SAPI, 0, 3 ) == 'cgi' ? true : false );
@@ -39,11 +51,14 @@ define ( 'IS_CGI', substr ( PHP_SAPI, 0, 3 ) == 'cgi' ? true : false );
  */
 define ( 'IS_WIN', strstr ( PHP_OS, 'WIN' ) ? true : false );
 /**
- * This constant defines whether the application should be in command mode or
- * not.
+ * This constant defines whether the application should be in command mode or not.
  */
 define ( 'IS_CLI', PHP_SAPI == 'cli' ? true : false );
-
+/**
+ * This constant defines whether the application parameters transferred meaning or not,
+ * Recommended system shut down automatically escape function.
+ */
+define ( 'MAGIC_QUOTES_GPC', function_exists ( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc () );
 /**
  * 核心类
  *

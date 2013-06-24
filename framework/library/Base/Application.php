@@ -46,8 +46,6 @@ abstract class Base_Application {
 		if (PHP_VERSION < '5.3.0') {
 			set_magic_quotes_runtime ( 0 );
 		}
-		define ( 'MAGIC_QUOTES_GPC', function_exists ( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc () );
-		define ( 'START_TIME', microtime ( true ) );
 		define ( 'MEMORY_LIMIT_ON', function_exists ( 'memory_get_usage' ) );
 		if (MEMORY_LIMIT_ON) define ( 'START_MEMORY', memory_get_usage () );
 		if (function_exists ( "set_time_limit" ) == true and @ini_get ( "safe_mode" ) == 0) {
