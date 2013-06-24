@@ -49,7 +49,7 @@ define ( 'IS_CLI', PHP_SAPI == 'cli' ? true : false );
  *
  * @author "XuTongle"
  */
-class Kernel {
+class Core {
 	public static $_imports = array ();
 
 	/**
@@ -71,7 +71,7 @@ class Kernel {
 	 * @throws Base_Exception if the configuration does not have a 'class'
 	 *         element.
 	 */
-	public static function createComponent($config) {
+	public static function component($config) {
 		if (is_string ( $config )) {
 			$type = $config;
 			$config = array ();
@@ -110,7 +110,7 @@ class Kernel {
 	 */
 	public static function init() {
 		if (version_compare ( PHP_VERSION, '5.2.0', '<' )) die ( 'require PHP > 5.2.0 !' );
-		spl_autoload_register ( array ('Kernel','autoload' ) );
+		spl_autoload_register ( array ('Core','autoload' ) );
 		if (! defined ( 'CORE_FUNCTION' ) && ! @include (FW_PATH . 'func.php')) exit ( 'func.php is missing' );
 		if (! defined ( 'CUSTOM_FUNCTION' ) && ! @include (FW_PATH . 'custom.php')) exit ( 'custom.php is missing' );
 	}
@@ -166,8 +166,5 @@ class Kernel {
 		}
 		return false;
 	}
-}
-class Core extends Kernel{
-
 }
 Core::init ();

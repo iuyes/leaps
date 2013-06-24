@@ -25,7 +25,7 @@ class Web_Application extends Base_Application {
 		define ( 'SITE_URL', htmlspecialchars ( Base_Request::get_base_url ( true ) ) . '/' );
 		/* 设置来源 */
 		define ( 'HTTP_REFERER', Base_Request::get_referer () );
-		Web_Filter::input ();
+		Base_Filter::input ();
 	}
 
 	public function run() {
@@ -52,4 +52,50 @@ class Web_Application extends Base_Application {
 		}
 	}
 
+	/**
+	 * 加载控制器
+	 *
+	 * @param string $controller
+	 * @param string $app
+	 */
+	public static function controller($controller = null, $app = null) {
+		$app = ! is_null ( $app ) ? trim ( $app ) : APP;
+		$controller = ! is_null ( $controller ) ? trim ( $controller ) : CONTROLLER;
+		$classname = $controller . 'Controller';
+		Core::import ( $app . ':controller.' . $classname );
+		if (class_exists ( $classname, false )) {
+			return new $classname ();
+		} else {
+			throw new Base_Exception ( 'Unable to create instance for ' . $classname . ' , class is not exist.',100 );
+		}
+	}
+
+	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
+		$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
+		list ( $fileLines, $trace ) = Utility::crash ( $file, $line, $trace );
+		foreach ( $trace as $key => $value ) {
+			$log .= $value . "\r\n";
+		}
+		log_message ( 'error', $log, TRUE );
+		if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') return;
+		if (IS_DEBUG) {
+			ob_start ();
+			include (FW_PATH . 'errors/error_php.php');
+			$buffer = ob_get_contents ();
+			ob_end_clean ();
+			die ( $buffer );
+		} else {//否则定向到错误页面
+			$error_page = C ( 'config', 'error_page' );
+			if (! empty ( $error_page )) {//如果错误页面不为空就重定向到配置文件中设置的地址
+				redirect($error_page);
+			} else {
+				if (C('config','show_error_msg')){
+					$e['message'] = $message;
+				} else {
+					$e['message'] = C('config','error_message');
+				}
+			}
+			Utility::show_error($e['message']);
+		}
+	}
 }

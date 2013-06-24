@@ -14,6 +14,7 @@ define ( 'BASE_PATH', dirname ( $_SERVER ['SCRIPT_FILENAME'] ) . DIRECTORY_SEPAR
 define ( 'WEKIT_PATH', dirname ( __FILE__ ) . DIRECTORY_SEPARATOR );
 define ( 'APPS_PATH', WEKIT_PATH . 'apps' . DIRECTORY_SEPARATOR );
 define ( 'DATA_PATH', WEKIT_PATH . 'data' . DIRECTORY_SEPARATOR );
+define ( 'IS_DEBUG', true );
 require WEKIT_PATH . '../framework/kernel.php';
 class Wekit {
 	/**

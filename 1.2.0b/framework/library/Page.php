@@ -1,6 +1,7 @@
 <?php
 /**
  * 分页类
+ *
  * @author Tongle Xu <xutongle@gmail.com> 2012-12-26
  * @copyright Copyright (c) 2003-2103 www.tintsoft.com
  * @version $Id: Page.php 564 2013-05-17 09:34:41Z 85825770@qq.com $
@@ -15,7 +16,7 @@ class Page {
 	 * @return URL
 	 */
 	public static function url_par($par, $url = '') {
-		if ($url == '') $url = Web_Request::get_request_uri ();
+		if ($url == '') $url = Base_Request::get_request_uri ();
 		$pos = strpos ( $url, '?' );
 		if ($pos === false) {
 			$url .= '?' . $par;
@@ -49,26 +50,14 @@ class Page {
 			$urlrules = explode ( '~', $urlrule );
 			$urlrule = $page < 2 ? $urlrules [0] : $urlrules [1];
 		}
-		$findme = array (
-				'{$page}'
-		);
-		$replaceme = array (
-				$page
-		);
+		$findme = array ('{$page}' );
+		$replaceme = array ($page );
 		if (is_array ( $array )) foreach ( $array as $k => $v ) {
 			$findme [] = '{$' . $k . '}';
 			$replaceme [] = $v;
 		}
 		$url = str_replace ( $findme, $replaceme, $urlrule );
-		$url = str_replace ( array (
-				'http://',
-				'//',
-				'~'
-		), array (
-				'~',
-				'/',
-				'http://'
-		), $url );
+		$url = str_replace ( array ('http://','//','~' ), array ('~','/','http://' ), $url );
 		return $url;
 	}
 
