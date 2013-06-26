@@ -1,0 +1,63 @@
+/* yuncms-toolbar */
+.yuncms-toolbar{position:fixed;z-index:99998;margin:0;padding:0}
+.yuncms-toolbar div,a{margin:0;padding:0}
+.yuncms-toolbar a{color:#06c;text-decoration:none}
+.yuncms-toolbar-btn{background-image:url(../images/toolbox/boxico2.png);display:block;height:40px;margin:0 auto 8px;position:relative;top:20px;width:40px}
+.yuncms-toolbar-btn:hover{background-image:url(../images/toolbox/box-hover.png)}
+.yuncms-toolbar div{position:relative}
+.yuncms-toolbar .yuncms-toolbar-body{padding-bottom:20px;top:-20px;width:60px}
+.yuncms-toolbar-body .yuncms-toolbar-bg{background-color:#036;height:100%;left:5px;position:absolute;width:48px}
+.yuncms-toolbar-foot{background:none repeat scroll 0 0 #036;height:16px;left:5px;top:-20px;width:48px}
+.yuncms-toolbar-ico1{background-position:-10px -4px}
+.yuncms-toolbar-ico1:hover{background-position:-7px -4px}
+.yuncms-toolbar-ico2{background-position:-59px -3px}
+.yuncms-toolbar-ico2:hover{background-position:-141px -4px}
+.yuncms-toolbar-ico3{background-position:-58px -56px}
+.yuncms-toolbar-ico3:hover{background-position:-233px -4px}
+.yuncms-toolbar-ico4{background-position:-14px -56px}
+.yuncms-toolbar-ico4:hover{background-position:-186px -4px}
+.yuncms-toolbar-ico5{background-position:-179px -7px}
+.yuncms-toolbar-ico5:hover{background-position:-95px -4px}
+.yuncms-toolbar-ico6{background-position:-182px -59px}
+.yuncms-toolbar-ico6:hover{background-position:-52px -4px}
+.yuncms-toolbar-ico7{background-position:-8px 40px}
+.yuncms-toolbar-ico7:hover{background-position:-277px -3px}
+.yuncms-toolbar-logo{background:url(../images/toolbox/boxico2.png) no-repeat scroll -110px top transparent;height:70px;position:relative;width:60px;z-index:999999}
+.yuncms-toolbar-shadow-radius{background:url(../images/toolbox/boxico.png) no-repeat scroll -152px -62px transparent;float:left;height:10px;top:-4px;width:48px}
+.yuncms-toolbar-size-switch-drop{margin:4px 6px 0 8px}
+.yuncms-toolbar-size-switch-drop,.yuncms-toolbar-size-switch-close{background:url(../images/toolbox/boxico.png) no-repeat scroll 0 0 transparent;display:block;float:left;height:16px;width:16px}
+.yuncms-toolbar-size-switch-drop:hover{background-position:-147px -20px}
+.yuncms-toolbar-min-status{background-position:-117px -4px}
+.yuncms-toolbar-min-status:hover{background-position:-117px -20px}
+.yuncms-toolbar-open-status{background-position:-147px -4px}
+.yuncms-toolbar-size-switch-close{background-position:-176px 0}
+.yuncms-toolbar-size-switch-close:hover{background-position:-176px -16px}
+/* yuncms-messagebox */
+.yuncms-messagebox{position:fixed;z-index:99998}
+.yuncms-messagebox .yuncms-messagebox-body-content{background:#FFF;margin:0 6px;overflow:hidden}
+.yuncms-messagebox .yuncms-messagebox-foot-center{background-color:#0062AB;height:8px;margin:0 5px}
+.yuncms-messagebox .yuncms-messagebox-head-content{background-position:0 -189px;margin:0 10px}
+.yuncms-messagebox a{color:#06c;text-decoration:none}
+.yuncms-messagebox div,a{margin:0;padding:0}
+.yuncms-messagebox-body{background:#0062AB}
+.yuncms-messagebox-body-statusbar{background-image:url("../images/toolbox/bar.png");height:40px;width:100%}
+.yuncms-messagebox-body-statusbar-ok{color:#FFF;background:url("../images/toolbox/boxico.png") no-repeat scroll -202px top transparent;border-width:0;display:block;height:32px;width:72px;position:relative;float:right}
+.yuncms-messagebox-body-statusbar-cancel{background:url("../images/toolbox/boxico.png") no-repeat scroll -202px -34px transparent;color:#666;height:32px;width:72px;top:5px;line-height:30px;position:relative;float:right}
+.yuncms-messagebox-foot-left{background-position:-99px -78px;left:0}
+.yuncms-messagebox-foot-left,.yuncms-messagebox-foot-right{background-image:url(../images/toolbox/boxico.png);bottom:0;height:8px;overflow:hidden;position:absolute;width:5px}
+.yuncms-messagebox-foot-right{background-position:-142px -78px;right:0}
+.yuncms-messagebox-head{height:32px;overflow:hidden}
+.yuncms-messagebox-head .yuncms-messagebox-head-ico{background:url(../images/toolbox/boxico2.png) -127px -69px;float:left;width:28px}
+.yuncms-messagebox-head .yuncms-messagebox-head-title{background:url(../images/toolbox/boxico2.png) -227px -40px no-repeat}
+.yuncms-messagebox-head .yuncms-messagebox-size-control{background:none;position:absolute;right:0;top:6px;width:66px}
+.yuncms-messagebox-head div{background-image:url(../images/toolbox/bar.png);height:32px}
+.yuncms-messagebox-head-closepanel{background-position:-60px -35px}
+.yuncms-messagebox-head-closepanel:hover{background-position:-60px -6px}
+.yuncms-messagebox-head-fullsize{background-position:-34px -35px}
+.yuncms-messagebox-head-left{background-position:0 -157px;left:0}
+.yuncms-messagebox-head-left,.yuncms-messagebox-head-right{position:absolute;top:0;width:10px}
+.yuncms-messagebox-head-minsize{background-position:0 -35px}
+.yuncms-messagebox-head-minsize:hover{background-position:1px -6px}
+.yuncms-messagebox-head-right{background-position:-10px -157px;right:0}
+.yuncms-messagebox-head-title h2{color:#FFF;float:left;font-size:1em;line-height:35px;margin:0;padding:0}
+.yuncms-messagebox-size-control a{background-image:url(../images/toolbox/boxico.png);float:left;height:22px;width:28px}
