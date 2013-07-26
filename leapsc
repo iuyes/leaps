@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Leaps command line script for Unix/Linux.
+ *
+ * This is the bootstrap script for running leapsc on Unix/Linux.
+ *
+ * @author Tongle Xu <qiang.xue@gmail.com>
+ * @link http://www.tintsoft.com/
+ * @copyright Copyright &copy; 2008 Tint Software LLC
+ * @license http://www.tintsoft.com/html/about/license/
+ */
+
+require_once(dirname(__FILE__).'/leapsc.php');

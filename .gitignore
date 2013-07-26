@@ -1,0 +1,6 @@
+.project
+.buildpath
+.settings
+.svn
+*.cache
+*.log
